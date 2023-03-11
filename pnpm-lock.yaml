@@ -7,6 +7,7 @@ specifiers:
   '@types/uuid': ^9.0.1
   altogic: ^2.3.9
   autoprefixer: ^10.4.13
+  clsx: ^1.2.1
   eslint: 8.35.0
   eslint-config-next: 13.2.3
   next: 13.2.3
@@ -17,12 +18,14 @@ specifiers:
   tailwindcss: ^3.2.7
   typescript: 4.9.5
   uuid: ^9.0.0
+  ymir-js: ^0.8.0
 
 dependencies:
   '@types/node': 18.14.6
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
   altogic: 2.3.9
+  clsx: 1.2.1
   eslint: 8.35.0
   eslint-config-next: 13.2.3_ycpbpc6yetojsgtrx3mwntkhsu
   next: 13.2.3_biqbaboplfbrettd7655fr4n2y
@@ -30,6 +33,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   typescript: 4.9.5
   uuid: 9.0.0
+  ymir-js: 0.8.0
 
 devDependencies:
   '@types/uuid': 9.0.1
@@ -604,6 +608,11 @@ packages:
 
   /client-only/0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+    dev: false
+
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
     dev: false
 
   /color-convert/2.0.1:
@@ -1694,6 +1703,10 @@ packages:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: false
 
+  /lodash/4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
+
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
@@ -2585,6 +2598,12 @@ packages:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
     dev: true
+
+  /ymir-js/0.8.0:
+    resolution: {integrity: sha512-Jt/CWdkUBofk03h91ilOO+G8/JCIhlYwkJhtci/VrUDS9r9idDPnADiVisj/n4HEtwfJuzC3luhZZj8zaLUXqQ==}
+    dependencies:
+      lodash: 4.17.21
+    dev: false
 
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
