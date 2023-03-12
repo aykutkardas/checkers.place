@@ -12,17 +12,18 @@ import { Color } from '@/app/room/[id]/page';
 
 import Column from '@/components/Column';
 import Item from '@/components/Item';
-
-const board = new CheckersBoard();
+import { GameType } from '@/app/page';
 
 interface BoardProps {
   id: string;
+  board: any;
+  gameType?: GameType;
   currentColor?: Color;
   isMe: (id: string) => boolean;
   realtime: RealtimeManager;
 }
 
-const Board = ({ id, currentColor, isMe, realtime }: BoardProps) => {
+const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps) => {
   const [turn, setTurn] = useState(0);
   const [move, setMove] = useState(0);
   const [activeColor, setActiveColor] = useState<Color>(Color.Black);
@@ -188,8 +189,8 @@ const Board = ({ id, currentColor, isMe, realtime }: BoardProps) => {
   const getCoord = (coord: string): [number, number] => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [x, y] = useCoord(coord);
-
-    return [x - 3.5, y - 3.5];
+    const gap = gameType === GameType.Turkish ? 3.5 : 4.5;
+    return [x - gap, y - gap];
   };
 
   return (
@@ -209,7 +210,7 @@ const Board = ({ id, currentColor, isMe, realtime }: BoardProps) => {
         <group rotation-y={currentColor === Color.White ? Math.PI / 2 : -Math.PI / 2}>
           {/* Board */}
           <mesh castShadow position={[0, 0, 0]}>
-            <boxGeometry args={[8, 0.3, 8]} />
+            <boxGeometry args={gameType === GameType.Turkish ? [8, 0.3, 8] : [10, 0.3, 10]} />
             <meshStandardMaterial color="#b3b3b3" />
           </mesh>
 

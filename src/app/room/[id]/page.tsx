@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { realtime } from '@/libs/altogic';
 import type { EventData } from 'altogic/src/types';
+// @ts-expect-error
+import { Checkers } from 'ymir-js';
 
 import Board from '@/components/Board';
 import { copyToClipboard, getDataFromSessionStorage, getMembers } from '@/helpers';
@@ -30,6 +32,7 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
 
   const gameData = getDataFromSessionStorage<{ color: Color; type: GameType }>('gameData');
   const [myColor, setMyColor] = useState(gameData?.color);
+  const [board, setBoard] = useState(null);
   const [gameType, setGameType] = useState(gameData?.type);
 
   const router = useRouter();
@@ -40,6 +43,10 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
 
   useEffect(() => {
     console.log({ gameType });
+
+    const { Board: CheckersBoard } = gameType === GameType.Turkish ? Checkers.Turkish : Checkers.International;
+    const board = new CheckersBoard();
+    setBoard(board);
   }, [gameType]);
 
   useEffect(() => {
@@ -111,7 +118,7 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
   };
 
   // TODO handle loading or error
-  if (!pageReady) return null;
+  if (!pageReady || !board) return null;
   return (
     <section className="py-4 flex flex-col items-center justify-evenly h-full">
       <div className="fixed px-2 top-0 left-0 flex justify-between w-full">
@@ -135,8 +142,8 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
           <p className="text-center text-xs text-white sm:text-xl">Send this link to your rival to connect.</p>
         </div>
       )}
-      <Board currentColor={myColor} isMe={isMe} id={id} realtime={realtime} />
-      <div className="w-screen h-[50vh] bottom-0 pointer-events-none fixed bg-gradient-to-t from-emerald-800/80 to-transparent"></div>
+      <Board gameType={gameType} board={board} currentColor={myColor} isMe={isMe} id={id} realtime={realtime} />
+      <div className="w-screen h-[50vh] bottom-0 pointer-events-none fixed bg-gradient-to-t from-emerald-800/80 to-transparent" />
     </section>
   );
 };
