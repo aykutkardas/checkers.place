@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Fragment, memo, MouseEvent, MutableRefObject, useCallback, useEffect, useState } from 'react';
+import { Fragment, MouseEvent, useCallback, useEffect, useState } from 'react';
 import { EventData, RealtimeManager } from 'altogic';
 // @ts-expect-error
-import { Checkers, Utils } from 'ymir-js';
+import { Utils } from 'ymir-js';
 import { Canvas } from '@react-three/fiber';
 import { AccumulativeShadows, Center, Environment, OrbitControls, RandomizedLight } from '@react-three/drei';
 import { Selection, EffectComposer, Outline } from '@react-three/postprocessing';

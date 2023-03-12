@@ -6,8 +6,12 @@ import { realtime } from '@/libs/altogic';
 import type { EventData } from 'altogic/src/types';
 // @ts-expect-error
 import { Checkers } from 'ymir-js';
+import dynamic from 'next/dynamic';
 
-import Board, { Color, GameType } from '@/components/Board';
+import { Color, GameType } from '@/components/Board';
+
+const Board = dynamic(() => import('@/components/Board'), { ssr: false });
+
 import { copyToClipboard, getDataFromSessionStorage, getMembers } from '@/helpers';
 
 const COPY_TEXT_DEFAULT = 'Click to copy link';
