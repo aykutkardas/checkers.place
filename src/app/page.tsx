@@ -24,12 +24,12 @@ const HomePage = () => {
   return (
     <section className="flex h-full items-center justify-center flex-col">
       <form className="flex flex-col gap-2" onSubmit={handleCreateRoom}>
-        <div className="text-center text-white text-xl underline underline-offset-8 mb-2">Game Type</div>
+        <div className="text-center text-emerald-200 text-sm font-medium">GAME TYPE</div>
         <div className="flex items-center justify-center gap-0.5">
           {gameTypes.map((gameType, id) => (
             <div className="group" key={id}>
               <input
-                className="hidden [&:checked+label]:bg-neutral-600"
+                className="hidden border border-transparent [&:checked+label]:border-white rounded-lg"
                 id={`${gameType}-${id}`}
                 type="radio"
                 name="type"
@@ -39,7 +39,7 @@ const HomePage = () => {
                 required
               />
               <label
-                className="cursor-pointer group-hover:bg-neutral-600 transition-colors text-white px-4 py-2 block"
+                className="cursor-pointer rounded-md border border-transparent group-hover:border-white/50 text-white transition-colors text-xs px-4 py-2 block"
                 htmlFor={`${gameType}-${id}`}
               >
                 {gameType.charAt(0).toUpperCase() + gameType.slice(1)}
@@ -47,12 +47,12 @@ const HomePage = () => {
             </div>
           ))}
         </div>
-        <div className="text-center text-white text-xl underline underline-offset-8 mb-2">Color</div>
+        <div className="text-center text-emerald-200 text-sm font-medium mt-3">COLOR</div>
         <div className="flex items-center justify-center gap-0.5">
           {colors.map((color, id) => (
             <div className="group" key={id}>
               <input
-                className="hidden [&:checked+label]:bg-neutral-600"
+                className="hidden border border-transparent [&:checked+label]:border-white rounded-lg"
                 id={`${color}-${id}`}
                 type="radio"
                 name="color"
@@ -62,7 +62,7 @@ const HomePage = () => {
                 required
               />
               <label
-                className="cursor-pointer group-hover:bg-neutral-600 transition-colors text-white px-4 py-2 block"
+                className="cursor-pointer rounded-md border border-transparent group-hover:border-white/50 text-white transition-colors text-xs px-4 py-2 block"
                 htmlFor={`${color}-${id}`}
               >
                 {color.charAt(0).toUpperCase() + color.slice(1)}
@@ -73,7 +73,7 @@ const HomePage = () => {
         <button
           type="submit"
           onClick={handleCreateRoom}
-          className="bg-amber-500 hover:bg-amber-600 text-white px-7 py-4 text-2xl rounded-2xl"
+          className="bg-gradient-to-t from-emerald-500 to-emerald-400 shadow-lg hover:scale-[1.1] border-none transition-all text-neutral-100 mt-5 font-medium block py-2 text-lg rounded-xl"
         >
           Create Room
         </button>
