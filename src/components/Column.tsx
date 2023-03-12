@@ -1,29 +1,20 @@
 import { MouseEvent } from 'react';
 import clsx from 'clsx';
+import { ThreeEvent } from '@react-three/fiber';
 
 interface ColumnProps {
-  coord: string;
+  position: [number, number, number];
   available: boolean;
-  children: JSX.Element;
-  onMove: (event: MouseEvent<HTMLElement>) => void;
+  color: string;
+  onMove: (event: ThreeEvent<globalThis.MouseEvent>) => void;
 }
 
-const Column = ({ onMove, coord, children, available }: ColumnProps) => {
+const Column = ({ onMove, position, color, available }: ColumnProps) => {
   return (
-    <div
-      key={coord}
-      className={clsx(
-        'column flex bg-[#666] items-center justify-center w-[50px] h-[50px] text-white cursor-pointer m-[1px] relative rounded-[2px]',
-        {
-          'bg-[#cafcca] hover:bg-[cafccacc]': available,
-        },
-      )}
-      data-coord={coord}
-      data-available={available}
-      onClick={onMove}
-    >
-      {children}
-    </div>
+    <mesh position={position} onClick={onMove}>
+      <boxGeometry args={available ? [0.99, 0.11, 0.99] : [1, 0.1, 1]} />
+      <meshStandardMaterial color={color} />
+    </mesh>
   );
 };
 

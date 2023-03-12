@@ -108,9 +108,18 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
   if (!pageReady) return null;
   return (
     <section className="py-4 flex flex-col items-center justify-evenly h-full">
-      <div className="fixed right-2 top-2 text-xs text-neutral-300 flex items-center">
-        Status:
-        <span className={`w-3 h-3 ml-1 block rounded-full ${connected ? 'bg-emerald-400' : 'bg-rose-400'}`}></span>
+      <div className="fixed top-0 left-0 flex justify-between w-full">
+        <button onClick={handleLeaveRoom} className="text-white text-lg">
+          Leave Room
+        </button>
+        <div className="text-xs text-neutral-800 flex items-center">
+          Status:
+          <span
+            className={`ring-2 ring-white w-3 h-3 ml-1 block rounded-full ${
+              connected ? 'bg-emerald-400' : 'bg-rose-400'
+            }`}
+          />
+        </div>
       </div>
 
       {!gameStarted && (
@@ -121,14 +130,7 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
         </div>
       )}
       <Board currentColor={myColor} isMe={isMe} id={id} realtime={realtime} />
-      <div className="flex gap-1">
-        <button
-          onClick={handleLeaveRoom}
-          className="bg-amber-500 hover:bg-amber-600 text-white px-7 py-2 text-2xl rounded-xl"
-        >
-          Leave Room
-        </button>
-      </div>
+      <div className="w-screen h-[50vh] bottom-0 pointer-events-none fixed bg-gradient-to-t from-emerald-800/80 to-transparent"></div>
     </section>
   );
 };

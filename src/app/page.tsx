@@ -8,13 +8,13 @@ import { realtime } from '@/libs/altogic';
 
 export enum GameType {
   Turkish = 'turkish',
-  Other = 'other',
+  International = 'international',
 }
 const HomePage = () => {
   const [type, setType] = useState<GameType>(GameType.Turkish);
   const [selectedColor, setSelectedColor] = useState<Color>(Color.White);
   const router = useRouter();
-  const gameTypes: GameType[] = [GameType.Turkish, GameType.Other];
+  const gameTypes: GameType[] = [GameType.Turkish, GameType.International];
   const colors: Color[] = [Color.White, Color.Black];
 
   const handleCreateRoom = (event: FormEvent) => {

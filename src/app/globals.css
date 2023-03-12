@@ -3,22 +3,39 @@
 @tailwind utilities;
 
 @layer components {
-	.copy-text {
-		font-size: clamp(0.8rem, 3vw, 1.2rem);
-		@apply relative cursor-pointer select-none rounded bg-white px-3 py-1 text-center font-semibold font-bold text-neutral-800;
-	}
+  .copy-text {
+    font-size: clamp(0.8rem, 3vw, 1.2rem);
+    @apply relative cursor-pointer select-none rounded bg-white px-3 py-1 text-center font-bold text-neutral-800;
+  }
 
-	.copy-text::after {
-		content: '';
-		@apply absolute left-1/2 bottom-0 h-[7px] w-[14px] -translate-x-1/2 translate-y-full bg-white;
-		--tw-translate-y: calc(100% - 1px);
-		line-height: normal;
-		clip-path: polygon(50% 100%, 0 0, 100% 0);
-	}
-	.link {
-		font-size: clamp(0.9rem, 3vw, 2rem);
-		line-height: normal;
-		scroll-padding-inline: 16px;
-		@apply overflow-auto max-w-[40ch] whitespace-nowrap cursor-pointer select-none rounded border bg-white/[0.15] px-4 py-2 font-semibold text-white;
-	}
+  .copy-text::after {
+    content: '';
+    @apply absolute left-1/2 bottom-0 h-[7px] w-[14px] -translate-x-1/2 translate-y-full bg-white;
+    --tw-translate-y: calc(100% - 1px);
+    line-height: normal;
+    clip-path: polygon(50% 100%, 0 0, 100% 0);
+  }
+  .link {
+    font-size: clamp(0.9rem, 3vw, 2rem);
+    line-height: normal;
+    scroll-padding-inline: 16px;
+    @apply overflow-auto max-w-[40ch] whitespace-nowrap cursor-pointer select-none rounded border bg-white/[0.15] px-4 py-2 font-semibold text-white;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #303035;
 }

@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-three/drei": "^9.57.2",
+    "@react-three/fiber": "^8.12.0",
     "@types/node": "18.14.6",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
@@ -16,14 +18,17 @@
     "clsx": "^1.2.1",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.3",
+    "leva": "^0.9.34",
     "next": "13.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "three": "^0.150.1",
     "typescript": "4.9.5",
     "uuid": "^9.0.0",
     "ymir-js": "^0.8.0"
   },
   "devDependencies": {
+    "@types/three": "^0.149.0",
     "@types/uuid": "^9.0.1",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",

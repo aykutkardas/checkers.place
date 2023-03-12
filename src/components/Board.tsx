@@ -1,8 +1,9 @@
-import { MouseEvent, useCallback, useEffect, useState } from 'react';
+import { Fragment, memo, MouseEvent, MutableRefObject, useCallback, useEffect, useState } from 'react';
 import { EventData, RealtimeManager } from 'altogic';
-import clsx from 'clsx';
 // @ts-expect-error
 import { Checkers, Utils } from 'ymir-js';
+import { Canvas } from '@react-three/fiber';
+import { AccumulativeShadows, Center, Environment, OrbitControls, RandomizedLight } from '@react-three/drei';
 
 const { Board: CheckersBoard } = Checkers.Turkish;
 const { useCoord } = Utils;
@@ -65,9 +66,7 @@ const Board = ({ id, currentColor, isMe, realtime }: BoardProps) => {
     setActiveCoord(coord);
   };
 
-  const handleSelectItem = ({ target }: MouseEvent<HTMLElement>) => {
-    // @ts-expect-error [TODO]
-    const { coord } = target.dataset;
+  const handleSelectItem = (coord: string) => {
     selectItem(coord);
   };
 
@@ -186,35 +185,76 @@ const Board = ({ id, currentColor, isMe, realtime }: BoardProps) => {
     selected: boolean;
   }
 
+  const getCoord = (coord: string): [number, number, number] => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [x, y] = useCoord(coord);
+
+    return [x - 3.5, 0.2, y - 3.5];
+  };
+
   return (
-    <>
-      <div
-        className={clsx(
-          '[&_.row:nth-child(odd)_&_.column:nth-child(odd)]:bg-[#555] [&_.row:nth-child(event)_&_.column:nth-child(event)]:bg-[#555]',
-          {
-            'rotate-180': currentColor === 'white',
-          },
-        )}
-      >
-        {boardMatrix.map((row: { coord: string; item: IItem }[], index: number) => (
-          <div key={index} className="row flex w-full">
-            {row.map(({ coord, item }) => (
-              <Column key={coord} coord={coord} available={availableColumns.includes(coord)} onMove={handleMoveItem}>
-                {item && (
-                  <Item
-                    color={item.color}
-                    king={item.king}
-                    selected={item.selected}
-                    coord={coord}
-                    onSelect={handleSelectItem}
+    <Canvas
+      shadows
+      camera={{
+        fov: 60,
+        near: 0.5,
+        far: 30,
+        position: [0, 15, 8],
+      }}
+    >
+      <Environment preset="city" />
+      <OrbitControls makeDefault />
+
+      <Center top>
+        <group rotation-y={currentColor === Color.White ? Math.PI / 2 : -Math.PI / 2}>
+          {/* Board */}
+          <mesh castShadow position={[0, 0, 0]}>
+            <boxGeometry args={[8, 0.3, 8]} />
+            <meshStandardMaterial color="#b3b3b3" />
+          </mesh>
+
+          {boardMatrix.map((row: { coord: string; item: IItem }[], index: number) => (
+            <Fragment key={index}>
+              {row.map(({ coord, item }, colIndex) => (
+                <Fragment key={coord}>
+                  <Column
+                    available={availableColumns.includes(coord)}
+                    position={getCoord(coord)}
+                    onMove={() => {
+                      if (!availableColumns.includes(coord)) return;
+                      moveItem(activeCoord, coord);
+                    }}
+                    color={
+                      availableColumns.includes(coord)
+                        ? '#10b981'
+                        : index % 2
+                        ? colIndex % 2
+                          ? '#aaaaaa'
+                          : '#c4c4c4'
+                        : colIndex % 2
+                        ? '#c4c4c4'
+                        : '#aaaaaa'
+                    }
                   />
-                )}
-              </Column>
-            ))}
-          </div>
-        ))}
-      </div>
-    </>
+                  {item && (
+                    <Item
+                      selected={item.selected}
+                      king={item.king}
+                      color={item.color}
+                      position={getCoord(coord)}
+                      onSelect={() => handleSelectItem(coord)}
+                    />
+                  )}
+                </Fragment>
+              ))}
+            </Fragment>
+          ))}
+        </group>
+        <AccumulativeShadows temporal frames={1} color="#9d4b4b" colorBlend={0.1} alphaTest={0.1} scale={1}>
+          <RandomizedLight amount={1} radius={1} position={[5, 5, 10]} />
+        </AccumulativeShadows>
+      </Center>
+    </Canvas>
   );
 };
 
