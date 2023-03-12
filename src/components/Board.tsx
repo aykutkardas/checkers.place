@@ -5,8 +5,7 @@ import { EventData, RealtimeManager } from 'altogic';
 import { Checkers, Utils } from 'ymir-js';
 import { Canvas } from '@react-three/fiber';
 import { AccumulativeShadows, Center, Environment, OrbitControls, RandomizedLight } from '@react-three/drei';
-
-const { Board: CheckersBoard } = Checkers.Turkish;
+import { Selection, EffectComposer, Outline } from '@react-three/postprocessing';
 const { useCoord } = Utils;
 
 import Column from '@/components/Column';
@@ -203,6 +202,7 @@ const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps
 
   return (
     <Canvas
+      dpr={[1, 2]}
       shadows
       camera={{
         fov: 60,
@@ -221,56 +221,61 @@ const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps
         minDistance={10}
         maxDistance={20}
       />
+      <Selection>
+        <EffectComposer multisampling={500} autoClear={false}>
+          <Outline blur edgeStrength={100} width={1500} />
+        </EffectComposer>
 
-      <Center top>
-        <group rotation-y={currentColor === Color.White ? Math.PI / 2 : -Math.PI / 2}>
-          {/* Board */}
-          <mesh castShadow position={[0, 0, 0]}>
-            <boxGeometry args={gameType === GameType.Turkish ? [8, 0.3, 8] : [10, 0.3, 10]} />
-            <meshStandardMaterial color="#b3b3b3" />
-          </mesh>
+        <Center top>
+          <group rotation-y={currentColor === Color.White ? Math.PI / 2 : -Math.PI / 2}>
+            {/* Board */}
+            <mesh castShadow position={[0, 0, 0]}>
+              <boxGeometry args={gameType === GameType.Turkish ? [8, 0.3, 8] : [10, 0.3, 10]} />
+              <meshStandardMaterial color="#b3b3b3" />
+            </mesh>
 
-          {boardMatrix.map((row: { coord: string; item: IItem }[], index: number) => (
-            <Fragment key={index}>
-              {row.map(({ coord, item }, colIndex) => (
-                <Fragment key={coord}>
-                  <Column
-                    available={availableColumns.includes(coord)}
-                    position={getCoord(coord)}
-                    onMove={() => {
-                      if (!availableColumns.includes(coord)) return;
-                      moveItem(activeCoord, coord);
-                    }}
-                    color={
-                      availableColumns.includes(coord)
-                        ? '#10b981'
-                        : index % 2
-                        ? colIndex % 2
-                          ? '#aaaaaa'
-                          : '#c4c4c4'
-                        : colIndex % 2
-                        ? '#c4c4c4'
-                        : '#aaaaaa'
-                    }
-                  />
-                  {item && (
-                    <Item
-                      selected={item.selected}
-                      king={item.king}
-                      color={item.color}
+            {boardMatrix.map((row: { coord: string; item: IItem }[], index: number) => (
+              <Fragment key={index}>
+                {row.map(({ coord, item }, colIndex) => (
+                  <Fragment key={coord}>
+                    <Column
+                      available={availableColumns.includes(coord)}
                       position={getCoord(coord)}
-                      onSelect={() => handleSelectItem(coord)}
+                      onMove={() => {
+                        if (!availableColumns.includes(coord)) return;
+                        moveItem(activeCoord, coord);
+                      }}
+                      color={
+                        availableColumns.includes(coord)
+                          ? '#10b981'
+                          : index % 2
+                          ? colIndex % 2
+                            ? '#aaaaaa'
+                            : '#c4c4c4'
+                          : colIndex % 2
+                          ? '#c4c4c4'
+                          : '#aaaaaa'
+                      }
                     />
-                  )}
-                </Fragment>
-              ))}
-            </Fragment>
-          ))}
-        </group>
-        <AccumulativeShadows temporal frames={1} color="#9d4b4b" colorBlend={0.1} alphaTest={0.1} scale={1}>
-          <RandomizedLight amount={1} radius={1} position={[5, 5, 10]} />
-        </AccumulativeShadows>
-      </Center>
+                    {item && (
+                      <Item
+                        selected={item.selected}
+                        king={item.king}
+                        color={item.color}
+                        position={getCoord(coord)}
+                        onSelect={() => handleSelectItem(coord)}
+                      />
+                    )}
+                  </Fragment>
+                ))}
+              </Fragment>
+            ))}
+          </group>
+          <AccumulativeShadows temporal frames={1} color="#9d4b4b" colorBlend={0.1} alphaTest={0.1} scale={1}>
+            <RandomizedLight amount={1} radius={1} position={[5, 5, 10]} />
+          </AccumulativeShadows>
+        </Center>
+      </Selection>
     </Canvas>
   );
 };
