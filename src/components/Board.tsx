@@ -185,11 +185,11 @@ const Board = ({ id, currentColor, isMe, realtime }: BoardProps) => {
     selected: boolean;
   }
 
-  const getCoord = (coord: string): [number, number, number] => {
+  const getCoord = (coord: string): [number, number] => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [x, y] = useCoord(coord);
 
-    return [x - 3.5, 0.2, y - 3.5];
+    return [x - 3.5, y - 3.5];
   };
 
   return (

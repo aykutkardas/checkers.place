@@ -2,7 +2,7 @@ import { ThreeEvent } from '@react-three/fiber';
 
 interface ItemProps {
   color: string;
-  position: [number, number, number];
+  position: [number, number];
   selected: boolean;
   king: boolean;
   onSelect: (event: ThreeEvent<globalThis.MouseEvent>) => void;
@@ -10,8 +10,8 @@ interface ItemProps {
 
 const Item = ({ color, position, selected, king, onSelect }: ItemProps) => {
   return (
-    <mesh castShadow receiveShadow position={position} onClick={onSelect}>
-      <cylinderGeometry args={king ? [0.3, 0.3, 0.3] : [0.3, 0.3, 0.2]} />
+    <mesh castShadow receiveShadow position={[position[0], 0.3, position[1]]} onClick={onSelect}>
+      <cylinderGeometry args={king ? [0.3, 0.3, 0.2] : [0.3, 0.3, 0.1]} />
       <meshStandardMaterial color={color} />
     </mesh>
   );
