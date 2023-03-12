@@ -212,7 +212,12 @@ const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps
       }}
     >
       <Environment preset="city" />
-      <OrbitControls makeDefault />
+      <OrbitControls
+        makeDefault
+        maxPolarAngle={Math.PI / 2}
+        minAzimuthAngle={-Math.PI * 0.25}
+        maxAzimuthAngle={Math.PI * 0.25}
+      />
 
       <Center top>
         <group rotation-y={currentColor === Color.White ? Math.PI / 2 : -Math.PI / 2}>
