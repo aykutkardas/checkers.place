@@ -30,12 +30,17 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
 
   const gameData = getDataFromSessionStorage<{ color: Color; type: GameType }>('gameData');
   const [myColor, setMyColor] = useState(gameData?.color);
+  const [gameType, setGameType] = useState(gameData?.type);
 
   const router = useRouter();
 
   useEffect(() => {
     console.log({ myColor });
   }, [myColor]);
+
+  useEffect(() => {
+    console.log({ gameType });
+  }, [gameType]);
 
   useEffect(() => {
     realtime.onJoin(onJoin);
@@ -76,6 +81,7 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
   const onColor = (payload: EventData) => {
     if (isMe(payload.message.socketId)) return;
     setMyColor(payload.message.gameData.color === Color.White ? Color.Black : Color.White);
+    setGameType(payload.message.gameData.type as GameType);
   };
 
   const onJoin = async (payload: EventData) => {
@@ -108,7 +114,7 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
   if (!pageReady) return null;
   return (
     <section className="py-4 flex flex-col items-center justify-evenly h-full">
-      <div className="fixed top-0 left-0 flex justify-between w-full">
+      <div className="fixed px-2 top-0 left-0 flex justify-between w-full">
         <button onClick={handleLeaveRoom} className="text-white text-lg">
           Leave Room
         </button>
