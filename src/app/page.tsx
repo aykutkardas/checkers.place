@@ -3,9 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { generateCode, setDataToSessionStorage } from '@/helpers';
-import { Color } from '@/app/room/[id]/page';
 import { realtime } from '@/libs/altogic';
-import { GameType } from '@/components/Board';
+import { Color, GameType } from '@/components/Board';
 
 const HomePage = () => {
   const [type, setType] = useState<GameType>(GameType.Turkish);
