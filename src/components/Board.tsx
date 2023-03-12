@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Fragment, memo, MouseEvent, MutableRefObject, useCallback, useEffect, useState } from 'react';
 import { EventData, RealtimeManager } from 'altogic';
 // @ts-expect-error
@@ -8,10 +9,13 @@ import { AccumulativeShadows, Center, Environment, OrbitControls, RandomizedLigh
 const { Board: CheckersBoard } = Checkers.Turkish;
 const { useCoord } = Utils;
 
-import { Color } from '@/app/room/[id]/page';
-
 import Column from '@/components/Column';
 import Item from '@/components/Item';
+
+export enum Color {
+  White = 'white',
+  Black = 'black',
+}
 
 export enum GameType {
   Turkish = 'turkish',

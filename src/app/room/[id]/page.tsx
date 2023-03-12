@@ -7,13 +7,8 @@ import type { EventData } from 'altogic/src/types';
 // @ts-expect-error
 import { Checkers } from 'ymir-js';
 
-import Board, { GameType } from '@/components/Board';
+import Board, { Color, GameType } from '@/components/Board';
 import { copyToClipboard, getDataFromSessionStorage, getMembers } from '@/helpers';
-
-export enum Color {
-  White = 'white',
-  Black = 'black',
-}
 
 const COPY_TEXT_DEFAULT = 'Click to copy link';
 
