@@ -115,14 +115,14 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
   if (!pageReady || !board) return null;
   return (
     <section className="py-4 flex flex-col items-center justify-evenly h-full">
-      <div className="fixed px-2 top-0 left-0 flex justify-between w-full">
-        <button onClick={handleLeaveRoom} className="text-white text-lg">
+      <div className="fixed px-3 top-0 left-0 flex items-center h-10 justify-between w-full">
+        <button onClick={handleLeaveRoom} className="text-white font-medium text-sm p-1">
           Leave Room
         </button>
-        <div className="text-xs text-neutral-800 flex items-center">
-          Status:
+        <div className="text-xs text-white flex items-center">
+          Status
           <span
-            className={`ring-2 ring-white w-3 h-3 ml-1 block rounded-full ${
+            className={`ring-2 ring-white w-3 h-3 ml-2 mt-[2px] block rounded-full ${
               connected ? 'bg-emerald-400' : 'bg-rose-400'
             }`}
           />
@@ -130,10 +130,10 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
       </div>
 
       {!gameStarted && (
-        <div onClick={() => copyURL(location.href)} className="flex flex-col items-center gap-3 w-full px-4">
-          <div className="copy-text">{copyText}</div>
-          <div className="link overflow-hidden">{location.href}</div>
-          <p className="text-center text-xs text-white sm:text-xl">Send this link to your rival to connect.</p>
+        <div onClick={() => copyURL(location.href)} className="flex flex-col items-center w-full px-4">
+          <div className="copy-text mb-3">{copyText}</div>
+          <div className="link overflow-hidden text-xs w-[500px] mb-2">{location.href}</div>
+          <p className="text-center text-xs text-white/80">Send this link to your rival to connect.</p>
         </div>
       )}
       <Board gameType={gameType} board={board} currentColor={myColor} isMe={isMe} id={id} realtime={realtime} />

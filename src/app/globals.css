@@ -5,12 +5,12 @@
 @layer components {
   .copy-text {
     font-size: clamp(0.8rem, 3vw, 1.2rem);
-    @apply relative cursor-pointer select-none rounded bg-white px-3 py-1 text-center font-bold text-neutral-800;
+    @apply relative cursor-pointer select-none rounded-xl bg-gradient-to-t from-emerald-500 to-emerald-500 text-white  px-4 py-2 text-center text-xs;
   }
 
   .copy-text::after {
     content: '';
-    @apply absolute left-1/2 bottom-0 h-[7px] w-[14px] -translate-x-1/2 translate-y-full bg-white;
+    @apply absolute left-1/2 bottom-0 h-[7px] w-[14px] -translate-x-1/2 translate-y-full bg-emerald-500;
     --tw-translate-y: calc(100% - 1px);
     line-height: normal;
     clip-path: polygon(50% 100%, 0 0, 100% 0);
@@ -19,7 +19,7 @@
     font-size: clamp(0.9rem, 3vw, 2rem);
     line-height: normal;
     scroll-padding-inline: 16px;
-    @apply overflow-auto max-w-[40ch] whitespace-nowrap cursor-pointer select-none rounded border bg-white/[0.15] px-4 py-2 font-semibold text-white;
+    @apply overflow-auto text-center whitespace-nowrap cursor-pointer select-none rounded-2xl border bg-white/[0.15] px-4 py-2 font-semibold text-white;
   }
 }
 
