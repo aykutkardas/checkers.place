@@ -114,7 +114,7 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
   // TODO handle loading or error
   if (!pageReady || !board) return null;
   return (
-    <section className="py-4 flex flex-col items-center justify-evenly h-full">
+    <section className="py-4 flex flex-col items-start justify-start h-full">
       <div className="fixed px-3 top-0 left-0 flex items-center h-10 justify-between w-full">
         <button onClick={handleLeaveRoom} className="text-white font-medium text-sm p-1">
           Leave Room
@@ -130,13 +130,18 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
       </div>
 
       {!gameStarted && (
-        <div onClick={() => copyURL(location.href)} className="flex flex-col items-center w-full px-4">
+        <div
+          onClick={() => copyURL(location.href)}
+          className="flex flex-col items-center justify-start w-full px-4 z-30"
+        >
           <div className="copy-text mb-3">{copyText}</div>
           <div className="link overflow-hidden text-xs w-[500px] mb-2">{location.href}</div>
           <p className="text-center text-xs text-white/80">Send this link to your rival to connect.</p>
         </div>
       )}
-      <Board gameType={gameType} board={board} currentColor={myColor} isMe={isMe} id={id} realtime={realtime} />
+      <div className="absolute top-0 left-0 w-screen h-screen">
+        <Board gameType={gameType} board={board} currentColor={myColor} isMe={isMe} id={id} realtime={realtime} />
+      </div>
       <div className="w-screen h-[50vh] bottom-0 pointer-events-none fixed bg-gradient-to-t from-emerald-800/80 to-transparent" />
     </section>
   );

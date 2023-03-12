@@ -208,7 +208,8 @@ const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps
         fov: 60,
         near: 0.5,
         far: 30,
-        position: [0, 15, 8],
+        position: [0, 10, 13],
+        zoom: 1.3,
       }}
     >
       <Environment preset="city" />
@@ -217,6 +218,8 @@ const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps
         maxPolarAngle={Math.PI / 2}
         minAzimuthAngle={-Math.PI * 0.25}
         maxAzimuthAngle={Math.PI * 0.25}
+        minDistance={10}
+        maxDistance={20}
       />
 
       <Center top>
