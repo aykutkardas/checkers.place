@@ -1,4 +1,4 @@
-import { MouseEvent, MutableRefObject, useCallback, useEffect, useState } from 'react';
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
 import { EventData, RealtimeManager } from 'altogic';
 import clsx from 'clsx';
 // @ts-expect-error
@@ -16,13 +16,12 @@ const board = new CheckersBoard();
 
 interface BoardProps {
   id: string;
-  currentColor: string;
-  socketId: MutableRefObject<string | undefined>;
+  currentColor?: Color;
   isMe: (id: string) => boolean;
   realtime: RealtimeManager;
 }
 
-const Board = ({ id, currentColor, socketId, isMe, realtime }: BoardProps) => {
+const Board = ({ id, currentColor, isMe, realtime }: BoardProps) => {
   const [turn, setTurn] = useState(0);
   const [move, setMove] = useState(0);
   const [activeColor, setActiveColor] = useState<Color>(Color.Black);
@@ -92,7 +91,7 @@ const Board = ({ id, currentColor, socketId, isMe, realtime }: BoardProps) => {
       if (!noSend) {
         realtime.send(id, 'position', {
           current: { fromCoord, toCoord },
-          socketId: socketId.current,
+          socketId: realtime.getSocketId(),
         });
       }
 
@@ -117,7 +116,7 @@ const Board = ({ id, currentColor, socketId, isMe, realtime }: BoardProps) => {
         if (!noSend) {
           realtime.send(id, 'activeColor', {
             current: { activeColor: newActiveColor },
-            socketId: socketId.current,
+            socketId: realtime.getSocketId(),
           });
         }
         setActiveCoord(null);
@@ -128,7 +127,7 @@ const Board = ({ id, currentColor, socketId, isMe, realtime }: BoardProps) => {
 
       setMove(move + 1);
     },
-    [activeColor, id, move, realtime, socketId, turn],
+    [activeColor, id, move, realtime, turn],
   );
 
   const handleMoveItem = ({ target }: MouseEvent<HTMLElement>) => {
