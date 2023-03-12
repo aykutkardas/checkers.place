@@ -5,11 +5,8 @@ import { FormEvent, useState } from 'react';
 import { generateCode, setDataToSessionStorage } from '@/helpers';
 import { Color } from '@/app/room/[id]/page';
 import { realtime } from '@/libs/altogic';
+import { GameType } from '@/components/Board';
 
-export enum GameType {
-  Turkish = 'turkish',
-  International = 'international',
-}
 const HomePage = () => {
   const [type, setType] = useState<GameType>(GameType.Turkish);
   const [selectedColor, setSelectedColor] = useState<Color>(Color.White);

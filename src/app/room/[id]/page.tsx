@@ -7,9 +7,8 @@ import type { EventData } from 'altogic/src/types';
 // @ts-expect-error
 import { Checkers } from 'ymir-js';
 
-import Board from '@/components/Board';
+import Board, { GameType } from '@/components/Board';
 import { copyToClipboard, getDataFromSessionStorage, getMembers } from '@/helpers';
-import { GameType } from '@/app/page';
 
 export enum Color {
   White = 'white',

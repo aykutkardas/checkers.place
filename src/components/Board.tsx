@@ -12,7 +12,11 @@ import { Color } from '@/app/room/[id]/page';
 
 import Column from '@/components/Column';
 import Item from '@/components/Item';
-import { GameType } from '@/app/page';
+
+export enum GameType {
+  Turkish = 'turkish',
+  International = 'international',
+}
 
 interface BoardProps {
   id: string;
