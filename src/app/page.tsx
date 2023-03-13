@@ -19,7 +19,7 @@ const HomePage = () => {
     const roomId = generateCode();
     realtime.updateProfile({ color: selectedColor, type });
     setDataToSessionStorage('gameData', { type, color: selectedColor });
-    router.push(`/room/${roomId}}`);
+    router.push(`/room/${roomId}`);
   };
 
   return (
