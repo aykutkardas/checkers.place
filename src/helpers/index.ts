@@ -35,6 +35,8 @@ export async function getMembers(id: string) {
   let { data } = await realtime.getMembers(id);
   data = data as { id: string; data?: {} }[];
 
+  if (!data) return { roomAvailable: false, members: [] };
+
   return {
     roomAvailable: data.length < 2,
     members: data,

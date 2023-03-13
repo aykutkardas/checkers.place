@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Fragment, MouseEvent, useCallback, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { EventData, RealtimeManager } from 'altogic';
 // @ts-expect-error
 import { Utils } from 'ymir-js';
@@ -53,7 +53,7 @@ const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps
       const columns = board.getAvailableColumns(activeCoord, activeItem.movement);
       setAvailableColumns(columns);
     }
-  }, [activeCoord, activeColor, currentColor]);
+  }, [activeCoord, activeColor]);
 
   const selectItem = (coord: string) => {
     if (activeColor !== currentColor) return;
@@ -78,72 +78,60 @@ const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps
     selectItem(coord);
   };
 
-  const moveItem = useCallback(
-    (fromCoord: string | null, toCoord: string, noSend?: boolean) => {
-      console.log('moveItem');
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const [toRowId] = useCoord(toCoord);
+  const moveItem = (fromCoord: string | null, toCoord: string, noSend?: boolean) => {
+    console.log('moveItem', !availableColumns.includes(toCoord));
 
-      if (toRowId === 0 || toRowId === 7) {
-        const activeItem = board.getItem(fromCoord);
-        activeItem.setKing();
-      }
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [toRowId] = useCoord(toCoord);
 
-      const coordsOfDestoryItems = board.getItemsBetweenTwoCoords(fromCoord, toCoord);
+    if (toRowId === 0 || toRowId === 7) {
+      const activeItem = board.getItem(fromCoord);
+      activeItem.setKing();
+    }
 
-      const destroyedAnyItemsThisTurn = coordsOfDestoryItems.length > 0;
+    const coordsOfDestoryItems = board.getItemsBetweenTwoCoords(fromCoord, toCoord);
 
-      board.moveItem(fromCoord, toCoord);
+    const destroyedAnyItemsThisTurn = coordsOfDestoryItems.length > 0;
+
+    board.moveItem(fromCoord, toCoord);
+    if (!noSend) {
+      realtime.send(id, 'position', {
+        current: { fromCoord, toCoord },
+        socketId: realtime.getSocketId(),
+      });
+    }
+
+    if (destroyedAnyItemsThisTurn) {
+      coordsOfDestoryItems.forEach((coord: string) => {
+        board.removeItem(coord);
+      });
+    }
+
+    board.deselectAllItems();
+    setBoardMatrix(board.getBoardMatrix());
+    setActiveCoord(toCoord);
+
+    const successMoves = Object.keys(board.getAttackCoordsByColor(activeColor)).filter(
+      (moveCoord) => moveCoord === toCoord,
+    );
+
+    if (!destroyedAnyItemsThisTurn || (destroyedAnyItemsThisTurn && !successMoves.length)) {
+      const newActiveColor = activeColor === Color.White ? Color.Black : Color.White;
+      setActiveColor(newActiveColor);
 
       if (!noSend) {
-        realtime.send(id, 'position', {
-          current: { fromCoord, toCoord },
+        realtime.send(id, 'activeColor', {
+          current: { activeColor: newActiveColor },
           socketId: realtime.getSocketId(),
         });
       }
+      setActiveCoord(null);
+      setTurn(turn + 1);
+    } else {
+      board.selectItem(toCoord);
+    }
 
-      if (destroyedAnyItemsThisTurn) {
-        coordsOfDestoryItems.forEach((coord: string) => {
-          board.removeItem(coord);
-        });
-      }
-
-      board.deselectAllItems();
-      setBoardMatrix(board.getBoardMatrix());
-      setActiveCoord(toCoord);
-
-      const successMoves = Object.keys(board.getAttackCoordsByColor(activeColor)).filter(
-        (moveCoord) => moveCoord === toCoord,
-      );
-
-      if (!destroyedAnyItemsThisTurn || (destroyedAnyItemsThisTurn && !successMoves.length)) {
-        const newActiveColor = activeColor === Color.White ? Color.Black : Color.White;
-        setActiveColor(newActiveColor);
-
-        if (!noSend) {
-          realtime.send(id, 'activeColor', {
-            current: { activeColor: newActiveColor },
-            socketId: realtime.getSocketId(),
-          });
-        }
-        setActiveCoord(null);
-        setTurn(turn + 1);
-      } else {
-        board.selectItem(toCoord);
-      }
-
-      setMove(move + 1);
-    },
-    [activeColor, id, move, realtime, turn],
-  );
-
-  const handleMoveItem = ({ target }: MouseEvent<HTMLElement>) => {
-    // @ts-expect-error [TODO]
-    const { coord } = target.dataset;
-
-    if (!availableColumns.includes(coord)) return;
-
-    moveItem(activeCoord, coord);
+    setMove(move + 1);
   };
 
   useEffect(() => {
@@ -157,25 +145,19 @@ const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [move]);
 
-  const onPosition = useCallback(
-    (payload: EventData) => {
-      if (isMe(payload.message.socketId)) return;
-      const { current } = payload.message;
-      moveItem(current.fromCoord, current.toCoord, true);
-    },
-    [isMe, moveItem],
-  );
+  const onPosition = (payload: EventData) => {
+    if (isMe(payload.message.socketId)) return;
+    const { current } = payload.message;
+    moveItem(current.fromCoord, current.toCoord, true);
+  };
 
-  const onActiveColor = useCallback(
-    (payload: EventData) => {
-      if (isMe(payload.message.socketId)) return;
-      const { current } = payload.message;
-      setActiveColor(current.activeColor);
-      setActiveCoord(null);
-      setTurn(turn + 1);
-    },
-    [isMe, turn],
-  );
+  const onActiveColor = (payload: EventData) => {
+    if (isMe(payload.message.socketId)) return;
+    const { current } = payload.message;
+    setActiveColor(current.activeColor);
+    setActiveCoord(null);
+    setTurn(turn + 1);
+  };
 
   useEffect(() => {
     realtime.on('position', onPosition);
@@ -185,7 +167,7 @@ const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps
       realtime.off('position', onPosition);
       realtime.off('activeColor', onActiveColor);
     };
-  }, [id, onActiveColor, onPosition, realtime]);
+  }, []);
 
   interface IItem {
     color: Color;
