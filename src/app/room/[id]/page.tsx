@@ -139,7 +139,9 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
           className="inline-flex mx-auto flex-col items-center justify-start px-4 z-30"
         >
           <div className="copy-text mb-3">{copyText}</div>
-          <div className="link overflow-hidden text-xs w-[500px] mb-2">{location.href}</div>
+          <div className="link overflow-hidden text-xs w-[500px] max-w-[80%] px-3 text-ellipsis mb-2">
+            {location.href}
+          </div>
           <p className="text-center text-xs text-white/80">Send this link to your rival to connect.</p>
         </div>
       )}
