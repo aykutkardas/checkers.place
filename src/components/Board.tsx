@@ -30,7 +30,8 @@ interface BoardProps {
   realtime: RealtimeManager;
 }
 
-const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps) => {
+const Board = ({ id, gameType, board: initialBoard, currentColor, isMe, realtime }: BoardProps) => {
+  const [board, setBoard] = useState(initialBoard);
   const [turn, setTurn] = useState(0);
   const [move, setMove] = useState(0);
   const [activeColor, setActiveColor] = useState<Color>(Color.Black);
@@ -56,8 +57,10 @@ const Board = ({ id, gameType, board, currentColor, isMe, realtime }: BoardProps
   }, [activeCoord, activeColor]);
 
   const selectItem = (coord: string) => {
+    console.log(activeColor, currentColor);
     if (activeColor !== currentColor) return;
     const activeItem = board.getItem(coord);
+    console.log(activeItem);
 
     const successMoves = Object.keys(board.getAttackCoordsByColor(activeColor));
 
