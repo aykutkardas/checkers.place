@@ -45,7 +45,7 @@ const HomePage = () => {
                   'cursor-pointer rounded-md border border-transparent text-white transition-colors text-xs px-4 py-2 block',
                   {
                     'group-hover:border-white/50': gameType !== GameType.International,
-                    'cursor-not-allowed text-white/70': gameType === GameType.International,
+                    '!cursor-not-allowed text-white/70': gameType === GameType.International,
                   },
                 )}
                 htmlFor={`${gameType}-${id}`}

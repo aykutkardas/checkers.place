@@ -40,7 +40,7 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
   useEffect(() => {
     console.log({ gameType });
 
-    const { Board: CheckersBoard } = gameType === GameType.Turkish ? Checkers.Turkish : Checkers.International;
+    const { Board: CheckersBoard } = gameType === GameType.International ? Checkers.International : Checkers.Turkish;
     const board = new CheckersBoard();
     setBoard(board);
   }, [gameType]);
