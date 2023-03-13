@@ -5,13 +5,14 @@ import { FormEvent, useState } from 'react';
 import { generateCode, setDataToSessionStorage } from '@/helpers';
 import { realtime } from '@/libs/altogic';
 import { Color, GameType } from '@/components/Board';
+import clsx from 'clsx';
 
 const HomePage = () => {
   const [type, setType] = useState<GameType>(GameType.Turkish);
-  const [selectedColor, setSelectedColor] = useState<Color>(Color.White);
+  const [selectedColor, setSelectedColor] = useState<Color>(Color.Black);
   const router = useRouter();
   const gameTypes: GameType[] = [GameType.Turkish, GameType.International];
-  const colors: Color[] = [Color.White, Color.Black];
+  const colors: Color[] = [Color.Black, Color.White];
 
   const handleCreateRoom = (event: FormEvent) => {
     event.preventDefault();
@@ -34,12 +35,19 @@ const HomePage = () => {
                 type="radio"
                 name="type"
                 value={gameType}
+                disabled={gameType === GameType.International}
                 checked={type === gameType}
                 onChange={(e) => setType(e.target.value as GameType)}
                 required
               />
               <label
-                className="cursor-pointer rounded-md border border-transparent group-hover:border-white/50 text-white transition-colors text-xs px-4 py-2 block"
+                className={clsx(
+                  'cursor-pointer rounded-md border border-transparent text-white transition-colors text-xs px-4 py-2 block',
+                  {
+                    'group-hover:border-white/50': gameType !== GameType.International,
+                    'cursor-not-allowed text-white/70': gameType === GameType.International,
+                  },
+                )}
                 htmlFor={`${gameType}-${id}`}
               >
                 {gameType.charAt(0).toUpperCase() + gameType.slice(1)}
