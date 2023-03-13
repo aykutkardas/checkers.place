@@ -110,7 +110,7 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
   // TODO handle loading or error
   if (!pageReady || !board) return null;
   return (
-    <section className="py-4 flex flex-col items-start justify-start h-full">
+    <section className="py-4 flex flex-col items-start justify-start h-screen">
       <div className="fixed z-30 px-3 top-0 left-0 flex items-center h-10 justify-between w-full">
         <button onClick={handleLeaveRoom} className="text-white font-medium text-sm p-1">
           Leave Room

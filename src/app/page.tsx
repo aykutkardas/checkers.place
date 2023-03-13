@@ -23,7 +23,7 @@ const HomePage = () => {
   };
 
   return (
-    <section className="flex h-full items-center justify-center flex-col">
+    <section className="flex h-screen items-center justify-center flex-col">
       <form className="flex flex-col gap-2" onSubmit={handleCreateRoom}>
         <div className="text-center text-emerald-200 text-sm font-medium">GAME TYPE</div>
         <div className="flex items-center justify-center gap-0.5">
