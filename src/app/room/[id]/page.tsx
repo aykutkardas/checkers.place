@@ -8,13 +8,11 @@ import type { EventData } from 'altogic/src/types';
 import { Checkers } from 'ymir-js';
 import dynamic from 'next/dynamic';
 
+import { getDataFromSessionStorage, getMembers } from '@/helpers';
+import Invite from '@/components/Invite';
 import { Color, GameType } from '@/components/Board';
 
 const Board = dynamic(() => import('@/components/Board'), { ssr: false });
-
-import { copyToClipboard, getDataFromSessionStorage, getMembers } from '@/helpers';
-
-const COPY_TEXT_DEFAULT = 'Click to copy link';
 
 type RoomPageProps = {
   params: {
@@ -25,7 +23,6 @@ type RoomPageProps = {
 const RoomPage = ({ params: { id } }: RoomPageProps) => {
   const [pageReady, setPageReady] = useState(false);
   const [connected, setConnected] = useState(false);
-  const [copyText, setCopyText] = useState(COPY_TEXT_DEFAULT);
   const [gameStarted, setGameStarted] = useState(false);
 
   const gameData = getDataFromSessionStorage<{ color: Color; type: GameType }>('gameData');
@@ -71,12 +68,6 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
   }, []);
 
   const isMe = (id: string) => id === realtime.getSocketId();
-
-  const copyURL = async (url: string) => {
-    await copyToClipboard(url);
-    setCopyText('Copied!');
-    setTimeout(() => setCopyText(COPY_TEXT_DEFAULT), 2000);
-  };
 
   const onDisconnect = () => {
     setConnected(realtime.isConnected());
@@ -133,18 +124,7 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
         </div>
       </div>
 
-      {!gameStarted && (
-        <div
-          onClick={() => copyURL(location.href)}
-          className="inline-flex mx-auto flex-col items-center justify-start px-4 z-30"
-        >
-          <div className="copy-text mb-3">{copyText}</div>
-          <div className="link overflow-hidden text-xs w-[500px] max-w-[80%] px-3 text-ellipsis mb-2">
-            {location.href}
-          </div>
-          <p className="text-center text-xs text-white/80">Send this link to your rival to connect.</p>
-        </div>
-      )}
+      {!gameStarted && <Invite />}
       <div className="absolute top-0 left-0 w-screen h-screen">
         <Board
           key={board}
