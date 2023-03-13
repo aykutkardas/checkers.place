@@ -1,8 +1,8 @@
-import { v4 as uuid } from 'uuid';
+import { nanoid } from 'nanoid';
 import { realtime } from '@/libs/altogic';
 
 export function generateCode() {
-  return uuid();
+  return nanoid(15);
 }
 
 export async function copyToClipboard(text: string) {

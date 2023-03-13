@@ -17,6 +17,7 @@ specifiers:
   eslint: 8.35.0
   eslint-config-next: 13.2.3
   leva: ^0.9.34
+  nanoid: ^4.0.1
   next: 13.2.3
   postcss: ^8.4.21
   prettier: ^2.8.4
@@ -26,7 +27,6 @@ specifiers:
   three: ^0.150.1
   typescript: 4.9.5
   utf-8-validate: ^6.0.3
-  uuid: ^9.0.0
   ymir-js: ^0.8.1
 
 dependencies:
@@ -43,13 +43,13 @@ dependencies:
   eslint: 8.35.0
   eslint-config-next: 13.2.3_ycpbpc6yetojsgtrx3mwntkhsu
   leva: 0.9.34_biqbaboplfbrettd7655fr4n2y
+  nanoid: 4.0.1
   next: 13.2.3_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   three: 0.150.1
   typescript: 4.9.5
   utf-8-validate: 6.0.3
-  uuid: 9.0.0
   ymir-js: 0.8.1
 
 devDependencies:
@@ -2461,6 +2461,12 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  /nanoid/4.0.1:
+    resolution: {integrity: sha512-udKGtCCUafD3nQtJg9wBhRP3KMbPglUsgV5JVsXhvyBs/oefqb4sqMEhKBBgqZncYowu58p1prsZQBYvAj/Gww==}
+    engines: {node: ^14 || ^16 || >=18}
+    hasBin: true
+    dev: false
+
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: false
@@ -3427,11 +3433,6 @@ packages:
   /utility-types/3.10.0:
     resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
     engines: {node: '>= 4'}
-    dev: false
-
-  /uuid/9.0.0:
-    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
-    hasBin: true
     dev: false
 
   /v8n/1.5.1:
