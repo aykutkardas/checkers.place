@@ -11,6 +11,7 @@ import dynamic from 'next/dynamic';
 import { getDataFromSessionStorage, getMembers } from '@/helpers';
 import Invite from '@/components/Invite';
 import { Color, GameType } from '@/components/Board';
+import clsx from 'clsx';
 
 const Board = dynamic(() => import('@/components/Board'), { ssr: false });
 
@@ -117,9 +118,10 @@ const RoomPage = ({ params: { id } }: RoomPageProps) => {
         <div className="text-xs text-white flex items-center">
           Status
           <span
-            className={`ring-2 ring-white w-3 h-3 ml-2 mt-[2px] block rounded-full ${
-              connected ? 'bg-emerald-400' : 'bg-rose-400'
-            }`}
+            className={clsx(
+              `ring-2 ring-white w-3 h-3 ml-2 mt-[2px] shadow-md block rounded-full bg-gradient-to-tr`,
+              connected ? 'from-emerald-400 to-emerald-200' : 'from-rose-400 to-rose-200',
+            )}
           />
         </div>
       </div>
