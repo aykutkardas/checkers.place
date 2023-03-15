@@ -6,7 +6,7 @@ import { Utils } from 'ymir-js';
 import { Canvas } from '@react-three/fiber';
 import { AccumulativeShadows, Center, Environment, OrbitControls, RandomizedLight } from '@react-three/drei';
 import { Selection, EffectComposer, Outline } from '@react-three/postprocessing';
-const { useCoord } = Utils;
+const { parseCoord } = Utils;
 
 import Column from '@/components/Column';
 import Item from '@/components/Item';
@@ -86,8 +86,7 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
   };
 
   const moveItem = (fromCoord: string | null, toCoord: string, noSend?: boolean) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [toRowId] = useCoord(toCoord);
+    const [toRowId] = parseCoord(toCoord);
 
     if (toRowId === 0 || toRowId === 7) {
       const activeItem = board.getItem(fromCoord);
@@ -181,8 +180,7 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
   }
 
   const getCoord = (coord: string): [number, number] => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [x, y] = useCoord(coord);
+    const [x, y] = parseCoord(coord);
     const gap = gameType === GameType.Turkish ? 3.5 : 4.5;
     return [x - gap, y - gap];
   };

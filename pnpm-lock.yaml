@@ -27,7 +27,7 @@ specifiers:
   three: ^0.150.1
   typescript: 4.9.5
   utf-8-validate: ^6.0.3
-  ymir-js: ^0.8.1
+  ymir-js: ^0.9.0
 
 dependencies:
   '@react-three/drei': 9.57.2_u3iila23zl7kxrjj2wxuc6ojr4
@@ -50,7 +50,7 @@ dependencies:
   three: 0.150.1
   typescript: 4.9.5
   utf-8-validate: 6.0.3
-  ymir-js: 0.8.1
+  ymir-js: 0.9.0
 
 devDependencies:
   '@types/three': 0.149.0
@@ -3541,8 +3541,8 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /ymir-js/0.8.1:
-    resolution: {integrity: sha512-ALoLk9vinkWllAUmZUP6l8tgFDxxrQUtB3qWtq++UalC+BBMBOPgsiVPXInjMjTblHN6FL0c3K4Q9LDl8OotKA==}
+  /ymir-js/0.9.0:
+    resolution: {integrity: sha512-RD45gpBFzE6oHVufgKTgfV7IuLU60XGXNg3uZXHBWOCjpnGLS/P2cCH1OjTWbmDqJt/+gF9iBWtMSMhbMWbV3Q==}
     dependencies:
       lodash: 4.17.21
     dev: false
