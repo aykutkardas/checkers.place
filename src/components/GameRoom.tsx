@@ -9,10 +9,9 @@ import dynamic from 'next/dynamic';
 
 import { getDataFromSessionStorage, getMembers } from '@/helpers';
 import Invite from '@/components/Invite';
-import { Color, GameType } from '@/components/Board';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { RoomDetails } from '@/app/room/[id]/page';
+import { Color, GameType, SessionStorageGameData } from '@/types';
 
 const Board = dynamic(() => import('@/components/Board'), { ssr: false });
 
@@ -27,16 +26,15 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   const [connected, setConnected] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [board, setBoard] = useState(null);
-  const [myColor] = useState(() => {
-    const roomData = getDataFromSessionStorage<RoomDetails>('room-data');
-    if (roomData) return roomData.color;
+  const [myColor] = useState<Color>(() => {
+    const roomData = getDataFromSessionStorage<SessionStorageGameData>('room-data') ?? {};
+    if (roomData[id]) return roomData[id].color;
     return isCreator ? roomDetails.color : roomDetails.color === Color.White ? Color.Black : Color.White;
   });
-  const [type] = useState(() => {
-    const roomData = getDataFromSessionStorage<RoomDetails>('room-data');
-    return roomData ? roomData.type : roomDetails.type;
+  const [type] = useState<GameType>(() => {
+    const roomData = getDataFromSessionStorage<SessionStorageGameData>('room-data') ?? {};
+    return roomData[id] ? roomData[id].type : roomDetails.type;
   });
-
   const path = usePathname();
   const router = useRouter();
   const { get } = useSearchParams();

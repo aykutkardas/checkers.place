@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Fragment, useEffect, useState } from 'react';
 import { EventData, RealtimeManager } from 'altogic';
 // @ts-expect-error
@@ -10,16 +9,8 @@ const { parseCoord } = Utils;
 
 import Column from '@/components/Column';
 import Item from '@/components/Item';
-
-export enum Color {
-  White = 'white',
-  Black = 'black',
-}
-
-export enum GameType {
-  Turkish = 'turkish',
-  International = 'international',
-}
+import { getDataFromSessionStorage, setDataToSessionStorage } from '@/helpers';
+import { Color, GameType, SessionStorageBoardData } from '@/types';
 
 interface BoardProps {
   id: string;
@@ -31,18 +22,20 @@ interface BoardProps {
 }
 
 const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe }: BoardProps) => {
+  const oldBoardMatrix = (getDataFromSessionStorage<SessionStorageBoardData>('board') ?? {})[id];
   const [board] = useState(initialBoard);
   const [hovered, setHovered] = useState(false);
   const [turn, setTurn] = useState(0);
   const [move, setMove] = useState(0);
   const [activeColor, setActiveColor] = useState<Color>(Color.Black);
   const [activeCoord, setActiveCoord] = useState<string | null>(null);
-  const [boardMatrix, setBoardMatrix] = useState(board.getBoardMatrix());
+  const [boardMatrix, setBoardMatrix] = useState(oldBoardMatrix ?? board.getBoardMatrix());
   const [availableColumns, setAvailableColumns] = useState<string[]>([]);
 
   useEffect(() => {
+    const oldData = getDataFromSessionStorage<SessionStorageBoardData>('board') ?? {};
     board.init();
-    setBoardMatrix(board.getBoardMatrix());
+    setBoardMatrix(oldData[id] ?? board.getBoardMatrix());
   }, []);
 
   useEffect(() => {
