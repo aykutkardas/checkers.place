@@ -1,6 +1,6 @@
 import { cache } from '@/libs/altogic';
 import GameRoom from '@/components/GameRoom';
-import { Color, GameType } from '@/components/Board';
+import { Color, GameType, RoomDetails } from '@/types';
 
 type RoomPageProps = {
   params: {
@@ -12,7 +12,6 @@ type RoomPageProps = {
   };
 };
 
-export type RoomDetails = { color: Color; type: GameType };
 async function getRoomDetails(id: string) {
   const { data, errors } = await cache.get(id);
   if (errors) {

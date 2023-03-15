@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import { generateCode, setDataToSessionStorage } from '@/helpers';
+import { generateCode, getDataFromSessionStorage, setDataToSessionStorage } from '@/helpers';
 import { cache, realtime } from '@/libs/altogic';
-import { Color, GameType } from '@/components/Board';
 import clsx from 'clsx';
+import { GameType, Color } from '@/types';
 
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,10 @@ const HomePage = () => {
     setLoading(true);
     const roomId = generateCode();
     realtime.updateProfile({ color: selectedColor, type });
-    setDataToSessionStorage('game-data', { color: selectedColor, type });
+    setDataToSessionStorage('game-data', {
+      ...(getDataFromSessionStorage('game-data') ?? {}),
+      [roomId]: { color: selectedColor, type },
+    });
     await cache.set(roomId, { type, color: selectedColor }, 1800);
     router.push(`/room/${roomId}?color=${selectedColor}&type=${type}`);
   };
