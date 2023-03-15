@@ -7,6 +7,6 @@ if (!ENT_URL || !CLIENT_KEY) {
   throw new Error('Missing environment variables for Altogic, please check your .env file');
 }
 
-const { realtime } = createClient(ENT_URL, CLIENT_KEY);
+const { realtime, cache } = createClient(ENT_URL, CLIENT_KEY);
 
-export { realtime };
+export { realtime, cache };

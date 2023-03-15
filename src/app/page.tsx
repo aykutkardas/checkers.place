@@ -3,23 +3,26 @@
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { generateCode, setDataToSessionStorage } from '@/helpers';
-import { realtime } from '@/libs/altogic';
+import { cache, realtime } from '@/libs/altogic';
 import { Color, GameType } from '@/components/Board';
 import clsx from 'clsx';
 
 const HomePage = () => {
+  const [loading, setLoading] = useState(false);
   const [type, setType] = useState<GameType>(GameType.Turkish);
   const [selectedColor, setSelectedColor] = useState<Color>(Color.Black);
   const router = useRouter();
   const gameTypes: GameType[] = [GameType.Turkish, GameType.International];
   const colors: Color[] = [Color.Black, Color.White];
 
-  const handleCreateRoom = (event: FormEvent) => {
+  const handleCreateRoom = async (event: FormEvent) => {
     event.preventDefault();
+    setLoading(true);
     const roomId = generateCode();
     realtime.updateProfile({ color: selectedColor, type });
-    setDataToSessionStorage('gameData', { type, color: selectedColor });
-    router.push(`/room/${roomId}`);
+    setDataToSessionStorage('game-data', { color: selectedColor, type });
+    await cache.set(roomId, { type, color: selectedColor }, 1800);
+    router.push(`/room/${roomId}?color=${selectedColor}&type=${type}`);
   };
 
   return (
@@ -83,7 +86,7 @@ const HomePage = () => {
           onClick={handleCreateRoom}
           className="bg-gradient-to-t from-emerald-500 to-emerald-400 shadow-lg hover:scale-[1.1] border-none transition-all text-neutral-100 mt-5 font-medium block py-2 text-lg rounded-xl"
         >
-          Create Room
+          {loading ? 'Creating...' : 'Create Room'}
         </button>
       </form>
     </section>
