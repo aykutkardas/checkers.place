@@ -26,12 +26,13 @@ interface BoardProps {
   board: any;
   gameType?: GameType;
   currentColor?: Color;
-  isMe: (id: string) => boolean;
   realtime: RealtimeManager;
+  isMe: (id: string) => boolean;
 }
 
-const Board = ({ id, gameType, board: initialBoard, currentColor, isMe, realtime }: BoardProps) => {
-  const [board, setBoard] = useState(initialBoard);
+const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe }: BoardProps) => {
+  const [board] = useState(initialBoard);
+  const [hovered, setHovered] = useState(false);
   const [turn, setTurn] = useState(0);
   const [move, setMove] = useState(0);
   const [activeColor, setActiveColor] = useState<Color>(Color.Black);
@@ -43,6 +44,11 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, isMe, realtime
     board.init();
     setBoardMatrix(board.getBoardMatrix());
   }, []);
+
+  useEffect(() => {
+    const available = activeColor === currentColor && hovered;
+    document.body.style.cursor = available ? 'pointer' : 'auto';
+  }, [hovered]);
 
   useEffect(() => {
     if (!activeCoord || activeColor !== currentColor) {
@@ -57,10 +63,8 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, isMe, realtime
   }, [activeCoord, activeColor]);
 
   const selectItem = (coord: string) => {
-    console.log(activeColor, currentColor);
     if (activeColor !== currentColor) return;
     const activeItem = board.getItem(coord);
-    console.log(activeItem);
 
     const successMoves = Object.keys(board.getAttackCoordsByColor(activeColor));
 
@@ -82,8 +86,6 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, isMe, realtime
   };
 
   const moveItem = (fromCoord: string | null, toCoord: string, noSend?: boolean) => {
-    console.log('moveItem', !availableColumns.includes(toCoord));
-
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [toRowId] = useCoord(toCoord);
 
@@ -226,6 +228,8 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, isMe, realtime
                     <Column
                       available={availableColumns.includes(coord)}
                       position={getCoord(coord)}
+                      onPointerEnter={() => setHovered(true)}
+                      onPointerOut={() => setHovered(false)}
                       onMove={() => {
                         if (!availableColumns.includes(coord)) return;
                         moveItem(activeCoord, coord);
@@ -244,11 +248,14 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, isMe, realtime
                     />
                     {item && (
                       <Item
+                        myColor={currentColor}
                         selected={item.selected}
                         king={item.king}
                         color={item.color}
                         position={getCoord(coord)}
                         onSelect={() => handleSelectItem(coord)}
+                        onPointerEnter={() => setHovered(true)}
+                        onPointerOut={() => setHovered(false)}
                       />
                     )}
                   </Fragment>
