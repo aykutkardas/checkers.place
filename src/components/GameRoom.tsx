@@ -100,7 +100,7 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
         <Link href="/" className="text-white font-medium text-sm p-1">
           Leave Room
         </Link>
-        <div className="text-xs flex items-center gap-2 text-white flex items-center">
+        <div className="text-xs flex items-center gap-2 text-white">
           Status
           <span
             className={clsx(

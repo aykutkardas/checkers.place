@@ -1,10 +1,10 @@
 <svg width="198" height="198" viewBox="0 0 198 198" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_107_2)">
-<rect width="198" height="198" rx="53" fill="#9CE066"/>
-<circle cx="52" cy="52" r="41" fill="#333333" stroke="#9CE066" stroke-width="8"/>
-<circle cx="144" cy="54" r="41" fill="white" stroke="#9CE066" stroke-width="8"/>
-<circle cx="53" cy="144" r="41" fill="white" stroke="#9CE066" stroke-width="8"/>
-<circle cx="145" cy="146" r="41" fill="#333333" stroke="#9CE066" stroke-width="8"/>
+<rect width="198" height="198" rx="53" fill="#0B8560"/>
+<circle cx="52" cy="52" r="39" fill="#333333" stroke="#0B8560" stroke-width="12"/>
+<circle cx="144" cy="54" r="39" fill="white" stroke="#0B8560" stroke-width="12"/>
+<circle cx="53" cy="144" r="39" fill="white" stroke="#0B8560" stroke-width="12"/>
+<circle cx="145" cy="146" r="39" fill="#333333" stroke="#0B8560" stroke-width="12"/>
 </g>
 <defs>
 <clipPath id="clip0_107_2">
