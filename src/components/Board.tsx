@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
 import { EventData, RealtimeManager } from 'altogic';
 // @ts-expect-error
 import { Utils } from 'ymir-js';
@@ -9,10 +9,13 @@ const { parseCoord } = Utils;
 
 import Column from '@/components/Column';
 import Item from '@/components/Item';
-import { getDataFromSessionStorage, setDataToSessionStorage } from '@/helpers';
-import { Color, GameType, SessionStorageBoardData } from '@/types';
+import { Color, GameType } from '@/types';
 
 interface BoardProps {
+  boardMatrix: never[];
+  setBoardMatrix: Dispatch<SetStateAction<never[]>>;
+  activeColor: Color;
+  setActiveColor: Dispatch<SetStateAction<Color>>;
   id: string;
   board: any;
   gameType?: GameType;
@@ -21,29 +24,29 @@ interface BoardProps {
   isMe: (id: string) => boolean;
 }
 
-const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe }: BoardProps) => {
-  const oldBoardMatrix = (getDataFromSessionStorage<SessionStorageBoardData>('board') ?? {})[id];
+const Board = ({
+  id,
+  gameType,
+  board: initialBoard,
+  currentColor,
+  realtime,
+  isMe,
+  activeColor,
+  setActiveColor,
+  setBoardMatrix,
+  boardMatrix,
+}: BoardProps) => {
   const [board] = useState(initialBoard);
   const [hovered, setHovered] = useState(false);
   const [turn, setTurn] = useState(0);
   const [move, setMove] = useState(0);
-  const [activeColor, setActiveColor] = useState<Color>(Color.Black);
   const [activeCoord, setActiveCoord] = useState<string | null>(null);
-  const [boardMatrix, setBoardMatrix] = useState(oldBoardMatrix ?? board.getBoardMatrix());
   const [availableColumns, setAvailableColumns] = useState<string[]>([]);
 
   useEffect(() => {
-    const oldData = getDataFromSessionStorage<SessionStorageBoardData>('board') ?? {};
     board.init();
-    setBoardMatrix(oldData[id] ?? board.getBoardMatrix());
+    setBoardMatrix(board.getBoardMatrix());
   }, []);
-
-  useEffect(() => {
-    setDataToSessionStorage('board', {
-      ...(getDataFromSessionStorage('board') ?? {}),
-      [id]: boardMatrix,
-    });
-  }, [boardMatrix]);
 
   useEffect(() => {
     const available = activeColor === currentColor && hovered;
@@ -163,13 +166,20 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
     setTurn(turn + 1);
   };
 
+  const onBoardStatus = (payload: EventData) => {
+    if (isMe(payload.message.socketId)) return;
+    console.log(payload.message);
+  };
+
   useEffect(() => {
     realtime.on('position', onPosition);
     realtime.on('activeColor', onActiveColor);
+    realtime.on('current-board-status', onBoardStatus);
 
     return () => {
       realtime.off('position', onPosition);
       realtime.off('activeColor', onActiveColor);
+      realtime.off('current-board-status', onBoardStatus);
     };
   }, []);
 
