@@ -23,7 +23,7 @@
     "eslint-config-next": "13.2.3",
     "leva": "^0.9.34",
     "nanoid": "^4.0.1",
-    "next": "13.2.3",
+    "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "three": "^0.150.1",
