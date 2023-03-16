@@ -41,19 +41,12 @@ const HomePage = () => {
                 type="radio"
                 name="type"
                 value={gameType}
-                disabled={gameType === GameType.International}
                 checked={type === gameType}
                 onChange={(e) => setType(e.target.value as GameType)}
                 required
               />
               <label
-                className={clsx(
-                  'cursor-pointer rounded-md border border-transparent text-white transition-colors text-xs px-4 py-2 block',
-                  {
-                    'group-hover:border-white/50': gameType !== GameType.International,
-                    '!cursor-not-allowed text-white/70': gameType === GameType.International,
-                  },
-                )}
+                className="group-hover:border-white/50 cursor-pointer rounded-md border border-transparent text-white transition-colors text-xs px-4 py-2 block"
                 htmlFor={`${gameType}-${id}`}
               >
                 {gameType.charAt(0).toUpperCase() + gameType.slice(1)}
