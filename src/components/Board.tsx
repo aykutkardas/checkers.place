@@ -39,6 +39,13 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
   }, []);
 
   useEffect(() => {
+    setDataToSessionStorage('board', {
+      ...(getDataFromSessionStorage('board') ?? {}),
+      [id]: boardMatrix,
+    });
+  }, [boardMatrix]);
+
+  useEffect(() => {
     const available = activeColor === currentColor && hovered;
     document.body.style.cursor = available ? 'pointer' : 'auto';
   }, [hovered]);
