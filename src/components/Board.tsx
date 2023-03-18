@@ -12,10 +12,6 @@ import Item from '@/components/Item';
 import { Color, GameType } from '@/types';
 
 interface BoardProps {
-  boardMatrix: never[];
-  setBoardMatrix: Dispatch<SetStateAction<never[]>>;
-  activeColor: Color;
-  setActiveColor: Dispatch<SetStateAction<Color>>;
   id: string;
   board: any;
   gameType?: GameType;
@@ -24,24 +20,16 @@ interface BoardProps {
   isMe: (id: string) => boolean;
 }
 
-const Board = ({
-  id,
-  gameType,
-  board: initialBoard,
-  currentColor,
-  realtime,
-  isMe,
-  activeColor,
-  setActiveColor,
-  setBoardMatrix,
-  boardMatrix,
-}: BoardProps) => {
+const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe }: BoardProps) => {
   const [board] = useState(initialBoard);
   const [hovered, setHovered] = useState(false);
   const [turn, setTurn] = useState(0);
   const [move, setMove] = useState(0);
   const [activeCoord, setActiveCoord] = useState<string | null>(null);
   const [availableColumns, setAvailableColumns] = useState<string[]>([]);
+  const [boardMatrix, setBoardMatrix] = useState([]);
+  const [activeColor, setActiveColor] = useState<Color>(Color.Black);
+  const [activeItem, setActiveItem] = useState<IItem | null>(null);
 
   useEffect(() => {
     board.init();
@@ -65,27 +53,38 @@ const Board = ({
     }
   }, [activeCoord, activeColor]);
 
-  const selectItem = (coord: string) => {
-    if (activeColor !== currentColor) return;
-    const activeItem = board.getItem(coord);
+  const sendActiveItem = (coord: string) => {
+    realtime.send(id, 'activeItem', {
+      current: { activeItem: coord },
+      socketId: realtime.getSocketId(),
+    });
+  };
 
+  const selectItem = (coord: string, noSend = false) => {
     const successMoves = Object.keys(board.getAttackCoordsByColor(activeColor));
+
+    console.log(successMoves);
 
     if (successMoves.length && !successMoves.includes(coord)) {
       selectItem(successMoves[0]);
+      !noSend && sendActiveItem(successMoves[0]);
       return;
     }
-
-    if (activeItem?.color !== activeColor) return;
 
     board.deselectAllItems();
     board.selectItem(coord);
 
     setActiveCoord(coord);
+    setActiveItem(board.getItem(coord));
+
+    !noSend && sendActiveItem(coord);
   };
 
   const handleSelectItem = (coord: string) => {
-    selectItem(coord);
+    const activeItemColor = board.getItem(coord).color;
+    if (activeItemColor === activeColor && activeColor === currentColor) {
+      selectItem(coord);
+    }
   };
 
   const moveItem = (fromCoord: string | null, toCoord: string, noSend?: boolean) => {
@@ -165,23 +164,24 @@ const Board = ({
     const { current } = payload.message;
     setActiveColor(current.activeColor);
     setActiveCoord(null);
-    setTurn(turn + 1);
   };
 
-  const onBoardStatus = (payload: EventData) => {
+  const onActiveItem = (payload: EventData) => {
     if (isMe(payload.message.socketId)) return;
     console.log(payload.message);
+    const { current } = payload.message;
+    setActiveItem(board.getItem(current.activeItem));
   };
 
   useEffect(() => {
     realtime.on('position', onPosition);
     realtime.on('activeColor', onActiveColor);
-    realtime.on('current-board-status', onBoardStatus);
+    realtime.on('activeItem', onActiveItem);
 
     return () => {
       realtime.off('position', onPosition);
       realtime.off('activeColor', onActiveColor);
-      realtime.off('current-board-status', onBoardStatus);
+      realtime.off('activeItem', onActiveItem);
     };
   }, []);
 
@@ -211,6 +211,7 @@ const Board = ({
     >
       <Environment preset="city" />
       <OrbitControls
+        enablePan={false}
         makeDefault
         maxPolarAngle={Math.PI / 2}
         minAzimuthAngle={-Math.PI * 0.25}
@@ -259,7 +260,7 @@ const Board = ({
                     {item && (
                       <Item
                         myColor={currentColor}
-                        selected={item.selected}
+                        selected={item.selected || activeItem === item}
                         king={item.king}
                         color={item.color}
                         position={getCoord(coord)}

@@ -25,10 +25,6 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   const [pageReady, setPageReady] = useState(false);
   const [connected, setConnected] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
-  const [board, setBoard] = useState(null);
-  const [someOneJoined, setSomeOneJoined] = useState(false);
-  const [boardMatrix, setBoardMatrix] = useState([]);
-  const [activeColor, setActiveColor] = useState<Color>(Color.Black);
 
   const [myColor] = useState<Color>(() => {
     const roomData = getDataFromSessionStorage<SessionStorageGameData>('room-data') ?? {};
@@ -45,18 +41,7 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   const { get } = useSearchParams();
 
   useEffect(() => {
-    const { Board: CheckersBoard } = type === GameType.International ? Checkers.International : Checkers.Turkish;
-    const board = new CheckersBoard();
-    setBoard(board);
-    setBoardMatrix(board.getBoardMatrix());
-    setActiveColor(Color.Black);
-  }, [type]);
-
-  useEffect(() => {
     if (get('color')) router.replace(path);
-    realtime.onJoin(onJoin);
-    realtime.onLeave(onLeave);
-    realtime.onDisconnect(onDisconnect);
 
     getMembers(id).then(({ roomAvailable }) => {
       if (roomAvailable) {
@@ -68,21 +53,16 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
       }
     });
 
+    realtime.onJoin(onJoin);
+    realtime.onLeave(onLeave);
+    realtime.onDisconnect(onDisconnect);
+
     return () => {
       realtime.leave(id);
       realtime.off('channel:join', onJoin);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (boardMatrix.length === 0) return;
-    realtime.send(id, 'current-board-status', {
-      activeColor,
-      boardMatrix,
-      socketId: realtime.getSocketId(),
-    });
-  }, [someOneJoined]);
 
   const isMe = (id: string) => id === realtime.getSocketId();
 
@@ -98,8 +78,6 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
 
     if (isMe(payload.message.id)) return;
 
-    setSomeOneJoined((prev) => !prev);
-
     console.log('Someone joined to the room');
   };
 
@@ -109,6 +87,10 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
     const { members } = await getMembers(id);
     setGameStarted(members.length === 2);
   };
+
+  const CurrentGame = type === GameType.International ? Checkers.International : Checkers.Turkish;
+  const { Board: CheckersBoard } = CurrentGame;
+  const board = new CheckersBoard();
 
   // TODO handle loading or error
   if (!pageReady || !board) return null;
@@ -130,12 +112,8 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
       </div>
 
       {!gameStarted && <Invite />}
-      <div className="absolute top-0 left-0 w-screen h-screen">
+      <div className="absolute top-0 left-0 w-screen h-screen select-none">
         <Board
-          boardMatrix={boardMatrix}
-          setBoardMatrix={setBoardMatrix}
-          activeColor={activeColor}
-          setActiveColor={setActiveColor}
           key={board}
           gameType={type}
           board={board}
