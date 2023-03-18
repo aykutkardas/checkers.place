@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { generateCode, getDataFromSessionStorage, setDataToSessionStorage } from '@/helpers';
 import { cache, realtime } from '@/libs/altogic';
-import clsx from 'clsx';
 import { GameType, Color } from '@/types';
 
 const HomePage = () => {

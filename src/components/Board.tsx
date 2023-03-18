@@ -90,8 +90,10 @@ const Board = ({
 
   const moveItem = (fromCoord: string | null, toCoord: string, noSend?: boolean) => {
     const [toRowId] = parseCoord(toCoord);
+    const bottomEdge = 0;
+    const topEdge = gameType === GameType.Turkish ? 7 : 9;
 
-    if (toRowId === 0 || toRowId === 7) {
+    if (toRowId === bottomEdge || toRowId === topEdge) {
       const activeItem = board.getItem(fromCoord);
       activeItem.setKing();
     }
