@@ -94,7 +94,8 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   const onLeave = async (payload: EventData) => {
     setConnected(realtime.isConnected());
     if (!isMe(payload.message.id)) {
-      setToast({ title: 'Left', description: 'Another player left the room' });
+      alert('You won, another player left the room');
+      router.push('/');
     }
     const { members } = await getMembers(id);
     setGameStarted(members.length === 2);

@@ -1,10 +1,12 @@
-import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { EventData, RealtimeManager } from 'altogic';
 // @ts-expect-error
 import { Utils } from 'ymir-js';
 import { Canvas } from '@react-three/fiber';
 import { AccumulativeShadows, Center, Environment, OrbitControls, RandomizedLight } from '@react-three/drei';
 import { Selection, EffectComposer, Outline } from '@react-three/postprocessing';
+import { useRouter } from 'next/navigation';
+
 const { parseCoord } = Utils;
 
 import Column from '@/components/Column';
@@ -31,6 +33,8 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
   const [activeColor, setActiveColor] = useState<Color>(Color.Black);
   const [activeItem, setActiveItem] = useState<IItem | null>(null);
 
+  const router = useRouter();
+
   useEffect(() => {
     board.init();
     setBoardMatrix(board.getBoardMatrix());
@@ -40,6 +44,10 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
     const available = activeColor === currentColor && hovered;
     document.body.style.cursor = available ? 'pointer' : 'auto';
   }, [hovered]);
+
+  useEffect(() => {
+    setActiveItem(null);
+  }, [activeColor]);
 
   useEffect(() => {
     if (!activeCoord || activeColor !== currentColor) {
@@ -62,8 +70,6 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
 
   const selectItem = (coord: string, noSend = false) => {
     const successMoves = Object.keys(board.getAttackCoordsByColor(activeColor));
-
-    console.log(successMoves);
 
     if (successMoves.length && !successMoves.includes(coord)) {
       selectItem(successMoves[0]);
@@ -143,15 +149,28 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
   };
 
   useEffect(() => {
-    const activeColorItems = board.getItemsByColor(activeColor);
+    const blackItems = board.getItemsByColor(Color.Black);
+    const whiteItems = board.getItemsByColor(Color.White);
+
+    const activeColorItems = activeColor === Color.Black ? blackItems : whiteItems;
 
     if (activeColorItems.length === 1) {
       const [lastItem] = activeColorItems;
       lastItem.setKing();
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [move]);
+    const winner = blackItems.length === 0 ? Color.White : whiteItems.length === 0 ? Color.Black : null;
+
+    if (!winner) return;
+
+    realtime.send(id, 'won', {
+      current: { winner },
+      socketId: realtime.getSocketId(),
+    });
+
+    alert(`Winner is "${winner}"!`);
+    router.push('/');
+  }, [move, activeColor, board]);
 
   const onPosition = (payload: EventData) => {
     if (isMe(payload.message.socketId)) return;
@@ -168,20 +187,28 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
 
   const onActiveItem = (payload: EventData) => {
     if (isMe(payload.message.socketId)) return;
-    console.log(payload.message);
     const { current } = payload.message;
     setActiveItem(board.getItem(current.activeItem));
+  };
+
+  const onWon = (payload: EventData) => {
+    if (isMe(payload.message.socketId)) return;
+    const { winner } = payload.message;
+    alert(`Winner is "${winner}"!`);
+    router.push('/');
   };
 
   useEffect(() => {
     realtime.on('position', onPosition);
     realtime.on('activeColor', onActiveColor);
     realtime.on('activeItem', onActiveItem);
+    realtime.on('won', onWon);
 
     return () => {
       realtime.off('position', onPosition);
       realtime.off('activeColor', onActiveColor);
       realtime.off('activeItem', onActiveItem);
+      realtime.off('won', onWon);
     };
   }, []);
 
