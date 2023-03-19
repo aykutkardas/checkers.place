@@ -24,8 +24,8 @@ const AboutPage = () => {
             </a>
             <ul className="text-xs text-center [&_li]:mt-1 text-white/70">
               <li>Game Logic & Mechanics</li>
-              <li>UI & UX Design</li>
               <li>Interface Development</li>
+              <li>UI & UX Design</li>
             </ul>
           </div>
 

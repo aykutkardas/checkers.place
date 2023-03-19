@@ -30,7 +30,7 @@ const HomePage = () => {
 
   return (
     <section className="flex h-screen items-center justify-center flex-col">
-      <form className={clsx('flex flex-col gap-2', { 'pointer-events-none': loading })} onSubmit={handleCreateRoom}>
+      <div className={clsx('flex flex-col gap-2 select-none', { 'pointer-events-none': loading })}>
         <div className="text-center text-emerald-200 text-sm font-medium">GAME TYPE</div>
         <div className="flex items-center justify-center gap-0.5">
           {gameTypes.map((gameType, id) => (
@@ -76,7 +76,7 @@ const HomePage = () => {
         >
           {loading ? 'Creating...' : 'Create Room'}
         </button>
-      </form>
+      </div>
     </section>
   );
 };
