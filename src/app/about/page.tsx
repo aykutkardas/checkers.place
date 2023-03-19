@@ -7,7 +7,7 @@ const AboutPage = () => {
     <section className="flex h-screen items-center justify-center flex-col">
       <div className={clsx('flex flex-col gap-2')}>
         <div className="text-center text-emerald-200 text-sm font-medium mb-2">CONTRIBUTORS</div>
-        <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-10">
+        <div className="flex flex-col items-center sm:items-start sm:flex-row items-start gap-4 sm:gap-10">
           <div className="flex flex-col text-white items-center justify-center gap-0.5">
             <a
               href="https://twitter.com/aykutkardas"
