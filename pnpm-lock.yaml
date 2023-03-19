@@ -24,6 +24,7 @@ specifiers:
   prettier: ^2.8.4
   react: 18.2.0
   react-dom: 18.2.0
+  react-icomoon: ^2.5.7
   tailwindcss: ^3.2.7
   three: ^0.150.1
   typescript: 4.9.5
@@ -49,6 +50,7 @@ dependencies:
   next: 13.2.4_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-icomoon: 2.5.7_react@18.2.0
   three: 0.150.1
   typescript: 4.9.5
   utf-8-validate: 6.0.3
@@ -3052,6 +3054,14 @@ packages:
       attr-accept: 2.2.2
       file-selector: 0.5.0
       prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
+  /react-icomoon/2.5.7_react@18.2.0:
+    resolution: {integrity: sha512-o6jsNviL7d2/fk83JXycvMSX76KSQ5GuC+q8xi+3anL4KY8EZH4D1BfXdqL8SF+ppOigrq4epUhfnWX8U/gM7g==}
+    peerDependencies:
+      react: ^16.4.1 || ^17.0.0 || ^18.0.0
+    dependencies:
       react: 18.2.0
     dev: false
 

@@ -1,12 +1,12 @@
 import { Fragment, useEffect, useState } from 'react';
 import { EventData, RealtimeManager } from 'altogic';
-// @ts-expect-error
-import { Utils } from 'ymir-js';
 import { Canvas } from '@react-three/fiber';
 import { AccumulativeShadows, Center, Environment, OrbitControls, RandomizedLight } from '@react-three/drei';
 import { Selection, EffectComposer, Outline } from '@react-three/postprocessing';
 import { useRouter } from 'next/navigation';
 
+// @ts-expect-error
+import { Utils } from 'ymir-js';
 const { parseCoord } = Utils;
 
 import Column from '@/components/Column';

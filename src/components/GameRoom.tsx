@@ -3,16 +3,18 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { realtime } from '@/libs/altogic';
 import type { EventData } from 'altogic/src/types';
-// @ts-expect-error
-import { Checkers } from 'ymir-js';
-import dynamic from 'next/dynamic';
 import * as Toast from '@radix-ui/react-toast';
-
-import { getDataFromSessionStorage, getMembers } from '@/helpers';
-import Invite from '@/components/Invite';
+import dynamic from 'next/dynamic';
 import clsx from 'clsx';
 import Link from 'next/link';
+
+// @ts-expect-error
+import { Checkers } from 'ymir-js';
+
+import { getDataFromSessionStorage, getMembers } from '@/helpers';
 import { Color, GameType, SessionStorageGameData } from '@/types';
+import Invite from '@/components/Invite';
+import Icon from '@/components/Icon';
 
 const Board = dynamic(() => import('@/components/Board'), { ssr: false });
 
@@ -116,11 +118,12 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   return (
     <Toast.Provider>
       <section className="py-4 flex flex-col items-start justify-start h-screen">
-        <div className="fixed z-30 px-3 top-0 left-0 flex items-center h-10 justify-between w-full">
-          <Link href="/" className="text-white font-medium text-sm p-1">
+        <div className="fixed z-30 p-3 top-[50%] right-0 inline-flex flex-col items-end h-10">
+          <Link href="/" className="text-white font-medium text-sm hover:opacity-80">
             Leave Room
+            <Icon icon="door-open" size={18} className="ml-1" />
           </Link>
-          <div className="text-xs flex items-center gap-2 text-white">
+          <div className="text-xs flex items-center gap-2 mt-3 text-white">
             Status
             <span
               className={clsx(
