@@ -85,14 +85,15 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
     setGameStarted(isGameStarted);
 
     if (isGameStarted) {
-      setToast({ message: 'Game Started' });
+      setGameAlreadyStarted(true);
+      setToast({ message: 'Game Started!' });
     } else {
-      setToast({ message: 'You are joined to the room' });
+      setToast({ message: 'You have joined the room. You are waiting for your rival...' });
     }
 
     if (isMe(payload.message.id)) return;
 
-    setToast({ message: 'Rival joined to the room' });
+    setToast({ message: 'Rival joined to the room. Game Started!' });
   };
 
   const onLeave = async (payload: EventData) => {
@@ -144,6 +145,7 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
             key={board}
             gameType={type}
             gameEnd={gameEnd}
+            gameStarted={gameStarted}
             setGameEnd={setGameEnd}
             board={board}
             currentColor={myColor}
@@ -156,7 +158,7 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
       </section>
 
       <Toast.Root
-        className="fixed bottom-4 right-4 bg-gradient-to-b from-emerald-600 px-5 py-3 to-transparent text-neutral-100 rounded-xl"
+        className="fixed top-40 left-[50%] -translate-x-[50%] bg-gradient-to-t from-emerald-500 px-5 py-3 shadow-md to-emerald-400/50 text-neutral-50 rounded-xl"
         duration={3000}
         open={!!toast}
         onOpenChange={(val) => setToast(val ? toast : null)}

@@ -17,6 +17,7 @@ interface BoardProps {
   board: any;
   gameType?: GameType;
   gameEnd: boolean;
+  gameStarted: boolean;
   setGameEnd: (value: boolean) => void;
   currentColor?: Color;
   realtime: RealtimeManager;
@@ -31,6 +32,7 @@ const Board = ({
   realtime,
   isMe,
   gameEnd,
+  gameStarted,
   setGameEnd,
 }: BoardProps) => {
   const [board] = useState(initialBoard);
@@ -49,6 +51,7 @@ const Board = ({
   }, []);
 
   useEffect(() => {
+    if (!gameStarted) return;
     const available = activeColor === currentColor && hovered;
     document.body.style.cursor = available ? 'pointer' : 'auto';
   }, [hovered, activeColor, currentColor]);
@@ -77,6 +80,7 @@ const Board = ({
   };
 
   const selectItem = (coord: string, noSend = false) => {
+    if (!gameStarted) return;
     const successMoves = Object.keys(board.getAttackCoordsByColor(activeColor));
 
     if (successMoves.length && !successMoves.includes(coord)) {
