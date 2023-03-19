@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/react';
 
 import Icon from '@/components/Icon';
 import Header from '@/components/Header';
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Icon icon="github" size={20} className="text-white" />
           </a>
         </footer>
+        <Analytics />
       </body>
     </html>
   );

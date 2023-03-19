@@ -10,6 +10,7 @@ specifiers:
   '@types/react-dom': 18.0.11
   '@types/three': ^0.149.0
   '@types/uuid': ^9.0.1
+  '@vercel/analytics': ^0.1.11
   altogic: ^2.3.9
   autoprefixer: ^10.4.13
   bufferutil: ^4.0.7
@@ -39,6 +40,7 @@ dependencies:
   '@types/node': 18.14.6
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
+  '@vercel/analytics': 0.1.11_react@18.2.0
   altogic: 2.3.9_wwk4ircikxegg2d5tdsobuyafe
   bufferutil: 4.0.7
   clsx: 1.2.1
@@ -1010,6 +1012,14 @@ packages:
       react: '>= 16.8.0'
     dependencies:
       '@use-gesture/core': 10.2.24
+      react: 18.2.0
+    dev: false
+
+  /@vercel/analytics/0.1.11_react@18.2.0:
+    resolution: {integrity: sha512-mj5CPR02y0BRs1tN3oZcBNAX9a8NxsIUl9vElDPcqxnMfP0RbRc9fI9Ud7+QDg/1Izvt5uMumsr+6YsmVHcyuw==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dependencies:
       react: 18.2.0
     dev: false
 
