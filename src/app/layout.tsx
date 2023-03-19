@@ -7,7 +7,7 @@ import Header from '@/components/Header';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Checkers Online',
+  title: 'Checkers Place',
   description: 'It is a 3D, minimal and online checkers game.',
   icons: [
     {
@@ -15,6 +15,17 @@ export const metadata: Metadata = {
       type: 'image/svg+xml',
     },
   ],
+  openGraph: {
+    title: 'Checkers Place',
+    url: 'https://checkers.place',
+    images: [
+      {
+        url: 'https://checkers.place/checkers-place-og.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
