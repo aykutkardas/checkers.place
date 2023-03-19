@@ -17,7 +17,6 @@ const HomePage = () => {
   const colors: Color[] = [Color.Black, Color.White];
 
   const handleCreateRoom = async (event: FormEvent) => {
-    event.preventDefault();
     setLoading(true);
     const roomId = generateCode();
     realtime.updateProfile({ color: selectedColor, type });
@@ -35,55 +34,43 @@ const HomePage = () => {
         <div className="text-center text-emerald-200 text-sm font-medium">GAME TYPE</div>
         <div className="flex items-center justify-center gap-0.5">
           {gameTypes.map((gameType, id) => (
-            <div className="group" key={id}>
-              <input
-                className="hidden border border-transparent [&:checked+label]:border-white rounded-lg"
-                id={`${gameType}-${id}`}
-                type="radio"
-                name="type"
-                value={gameType}
-                checked={type === gameType}
-                onChange={(e) => setType(e.target.value as GameType)}
-                required
-              />
-              <label
-                className="group-hover:border-white/50 cursor-pointer rounded-md border border-transparent text-white transition-colors text-xs px-4 py-2 block"
-                htmlFor={`${gameType}-${id}`}
-              >
-                {gameType.charAt(0).toUpperCase() + gameType.slice(1)}
-              </label>
+            <div
+              className={clsx(
+                'group-hover:border-white/50 focus:outline-emerald-300 cursor-pointer rounded-md border border-transparent text-white transition-colors text-xs px-4 py-2 block',
+                { 'border border-transparent border-white rounded-lg': type === gameType },
+              )}
+              role="button"
+              tabIndex={0}
+              onClick={(e) => setType(gameType)}
+              key={id}
+            >
+              {gameType.charAt(0).toUpperCase() + gameType.slice(1)}
             </div>
           ))}
         </div>
         <div className="text-center text-emerald-200 text-sm font-medium mt-3">COLOR</div>
         <div className="flex items-center justify-center gap-0.5">
           {colors.map((color, id) => (
-            <div className="group" key={id}>
-              <input
-                className="hidden border border-transparent [&:checked+label]:border-white rounded-lg"
-                id={`${color}-${id}`}
-                type="radio"
-                name="color"
-                value={color}
-                checked={selectedColor === color}
-                onChange={(e) => setSelectedColor(e.target.value as Color)}
-                required
-              />
-              <label
-                className="cursor-pointer rounded-md border border-transparent group-hover:border-white/50 text-white transition-colors text-xs px-4 py-2 block"
-                htmlFor={`${color}-${id}`}
-              >
-                {color.charAt(0).toUpperCase() + color.slice(1)}
-              </label>
+            <div
+              role="button"
+              className={clsx(
+                'group-hover:border-white/50 focus:outline-emerald-300 cursor-pointer rounded-md border border-transparent text-white transition-colors text-xs px-4 py-2 block',
+                { 'border border-transparent border-white rounded-lg': selectedColor === color },
+              )}
+              onClick={(e) => setSelectedColor(color)}
+              tabIndex={0}
+              key={id}
+            >
+              {color.charAt(0).toUpperCase() + color.slice(1)}
             </div>
           ))}
         </div>
         <button
-          type="submit"
+          type="button"
           disabled={loading}
           onClick={handleCreateRoom}
           className={clsx(
-            'bg-gradient-to-t from-emerald-500 to-emerald-400 shadow-lg border-none transition-all text-neutral-100 mt-5 font-medium block py-2 text-lg rounded-xl',
+            'bg-gradient-to-t from-emerald-500 to-emerald-400 focus:outline-emerald-300 shadow-lg border-none transition-all text-neutral-100 mt-5 font-medium block py-2 text-lg rounded-xl',
             loading ? 'scale-[1.1] opacity-80' : 'hover:scale-[1.1]',
           )}
         >
