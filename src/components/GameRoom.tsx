@@ -30,7 +30,7 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameAlreadyStarted, setGameAlreadyStarted] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
-  const [toast, setToast] = useState<{ title: string; description?: string } | null>(null);
+  const [toast, setToast] = useState<{ message: string; description?: string } | null>(null);
 
   const [myColor] = useState<Color>(() => {
     const roomData = getDataFromSessionStorage<SessionStorageGameData>('room-data') ?? {};
@@ -75,7 +75,7 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   const onDisconnect = () => {
     setConnected(realtime.isConnected());
     setGameStarted(false);
-    setToast({ title: 'Disconnected', description: 'You are disconnected from the server' });
+    setToast({ message: 'Disconnected' });
   };
 
   const onJoin = async (payload: EventData) => {
@@ -85,21 +85,21 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
     setGameStarted(isGameStarted);
 
     if (isGameStarted) {
-      setToast({ title: 'Game Started', description: 'Game is started with another player' });
+      setToast({ message: 'Game Started' });
     } else {
-      setToast({ title: 'Joined', description: 'You are joined to the room' });
+      setToast({ message: 'You are joined to the room' });
     }
 
     if (isMe(payload.message.id)) return;
 
-    setToast({ title: 'Joined', description: 'Another player joined to the room' });
+    setToast({ message: 'Rival joined to the room' });
   };
 
   const onLeave = async (payload: EventData) => {
     if (gameEnd) return;
     setConnected(realtime.isConnected());
     if (!isMe(payload.message.id)) {
-      alert('You won, another player left the room');
+      alert('You won, rival left the room');
     }
     const { members } = await getMembers(id);
     setGameStarted(members.length === 2);
@@ -156,13 +156,12 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
       </section>
 
       <Toast.Root
-        className="fixed bottom-3 right-3 px-4 py-2 bg-neutral-50 text-neutral-700 rounded-xl shadow-lg"
+        className="fixed bottom-4 right-4 bg-gradient-to-b from-emerald-600 px-5 py-3 to-transparent text-neutral-100 rounded-xl"
         duration={3000}
         open={!!toast}
         onOpenChange={(val) => setToast(val ? toast : null)}
       >
-        <Toast.Title className="font-medium text-neutral-900">{toast?.title}</Toast.Title>
-        <Toast.Description className="text-xs">{toast?.description}</Toast.Description>
+        <Toast.Description className="text-xs">{toast?.message}</Toast.Description>
       </Toast.Root>
 
       <Toast.Viewport />
