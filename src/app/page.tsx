@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
+import clsx from 'clsx';
+
 import { generateCode, getDataFromSessionStorage, setDataToSessionStorage } from '@/helpers';
 import { cache, realtime } from '@/libs/altogic';
 import { GameType, Color } from '@/types';
@@ -29,7 +31,7 @@ const HomePage = () => {
 
   return (
     <section className="flex h-screen items-center justify-center flex-col">
-      <form className="flex flex-col gap-2" onSubmit={handleCreateRoom}>
+      <form className={clsx('flex flex-col gap-2', { 'pointer-events-none': loading })} onSubmit={handleCreateRoom}>
         <div className="text-center text-emerald-200 text-sm font-medium">GAME TYPE</div>
         <div className="flex items-center justify-center gap-0.5">
           {gameTypes.map((gameType, id) => (
@@ -78,8 +80,12 @@ const HomePage = () => {
         </div>
         <button
           type="submit"
+          disabled={loading}
           onClick={handleCreateRoom}
-          className="bg-gradient-to-t from-emerald-500 to-emerald-400 shadow-lg hover:scale-[1.1] border-none transition-all text-neutral-100 mt-5 font-medium block py-2 text-lg rounded-xl"
+          className={clsx(
+            'bg-gradient-to-t from-emerald-500 to-emerald-400 shadow-lg border-none transition-all text-neutral-100 mt-5 font-medium block py-2 text-lg rounded-xl',
+            loading ? 'scale-[1.1] opacity-80' : 'hover:scale-[1.1]',
+          )}
         >
           {loading ? 'Creating...' : 'Create Room'}
         </button>
