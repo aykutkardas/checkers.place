@@ -33,12 +33,12 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   const [toast, setToast] = useState<{ message: string; description?: string } | null>(null);
 
   const [myColor] = useState<Color>(() => {
-    const roomData = getDataFromSessionStorage<SessionStorageGameData>('room-data') ?? {};
+    const roomData = getDataFromSessionStorage<SessionStorageGameData>('game-data') ?? {};
     if (roomData[id]) return roomData[id].color;
     return isCreator ? roomDetails.color : roomDetails.color === Color.White ? Color.Black : Color.White;
   });
   const [type] = useState<GameType>(() => {
-    const roomData = getDataFromSessionStorage<SessionStorageGameData>('room-data') ?? {};
+    const roomData = getDataFromSessionStorage<SessionStorageGameData>('game-data') ?? {};
     return roomData[id] ? roomData[id].type : roomDetails.type;
   });
 
