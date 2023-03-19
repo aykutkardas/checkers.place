@@ -26,6 +26,8 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   const [pageReady, setPageReady] = useState(false);
   const [connected, setConnected] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [gameAlreadyStarted, setGameAlreadyStarted] = useState(false);
+  const [gameEnd, setGameEnd] = useState(false);
   const [toast, setToast] = useState<{ title: string; description?: string } | null>(null);
 
   const [myColor] = useState<Color>(() => {
@@ -92,13 +94,17 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   };
 
   const onLeave = async (payload: EventData) => {
+    if (gameEnd) return;
     setConnected(realtime.isConnected());
     if (!isMe(payload.message.id)) {
       alert('You won, another player left the room');
-      router.push('/');
     }
     const { members } = await getMembers(id);
     setGameStarted(members.length === 2);
+
+    if (members.length === 2) {
+      setGameAlreadyStarted(true);
+    }
   };
 
   const CurrentGame = type === GameType.International ? Checkers.International : Checkers.Turkish;
@@ -119,17 +125,23 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
             <span
               className={clsx(
                 `ring-2 ring-white w-3 h-3 shadow-md block rounded-full bg-gradient-to-tr`,
-                connected ? 'from-emerald-400 to-emerald-200' : 'from-rose-400 to-rose-200',
+                connected
+                  ? gameStarted
+                    ? 'from-emerald-400 to-emerald-200'
+                    : 'from-neutral-400 to-neutral-200'
+                  : 'from-rose-400 to-rose-200',
               )}
             />
           </div>
         </div>
 
-        {!gameStarted && <Invite />}
+        {!gameAlreadyStarted && <Invite />}
         <div className="absolute top-0 left-0 w-screen h-screen select-none">
           <Board
             key={board}
             gameType={type}
+            gameEnd={gameEnd}
+            setGameEnd={setGameEnd}
             board={board}
             currentColor={myColor}
             isMe={isMe}
@@ -139,6 +151,7 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
         </div>
         <div className="w-screen h-[50vh] bottom-0 pointer-events-none fixed bg-gradient-to-t from-emerald-800/80 to-transparent" />
       </section>
+
       <Toast.Root
         className="fixed bottom-3 right-3 px-4 py-2 bg-neutral-50 text-neutral-700 rounded-xl shadow-lg"
         duration={3000}

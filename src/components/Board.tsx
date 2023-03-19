@@ -17,12 +17,23 @@ interface BoardProps {
   id: string;
   board: any;
   gameType?: GameType;
+  gameEnd: boolean;
+  setGameEnd: (value: boolean) => void;
   currentColor?: Color;
   realtime: RealtimeManager;
   isMe: (id: string) => boolean;
 }
 
-const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe }: BoardProps) => {
+const Board = ({
+  id,
+  gameType,
+  board: initialBoard,
+  currentColor,
+  realtime,
+  isMe,
+  gameEnd,
+  setGameEnd,
+}: BoardProps) => {
   const [board] = useState(initialBoard);
   const [hovered, setHovered] = useState(false);
   const [turn, setTurn] = useState(0);
@@ -43,7 +54,7 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
   useEffect(() => {
     const available = activeColor === currentColor && hovered;
     document.body.style.cursor = available ? 'pointer' : 'auto';
-  }, [hovered]);
+  }, [hovered, activeColor, currentColor]);
 
   useEffect(() => {
     setActiveItem(null);
@@ -149,6 +160,8 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
   };
 
   useEffect(() => {
+    if (gameEnd) return;
+
     const blackItems = board.getItemsByColor(Color.Black);
     const whiteItems = board.getItemsByColor(Color.White);
 
@@ -163,14 +176,15 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
 
     if (!winner) return;
 
+    setGameEnd(true);
+
     realtime.send(id, 'won', {
       current: { winner },
       socketId: realtime.getSocketId(),
     });
 
     alert(`Winner is "${winner}"!`);
-    router.push('/');
-  }, [move, activeColor, board]);
+  }, [move, activeColor, board, gameEnd, setGameEnd, id, router, realtime]);
 
   const onPosition = (payload: EventData) => {
     if (isMe(payload.message.socketId)) return;
@@ -194,8 +208,8 @@ const Board = ({ id, gameType, board: initialBoard, currentColor, realtime, isMe
   const onWon = (payload: EventData) => {
     if (isMe(payload.message.socketId)) return;
     const { winner } = payload.message;
+    if (!winner) return;
     alert(`Winner is "${winner}"!`);
-    router.push('/');
   };
 
   useEffect(() => {
