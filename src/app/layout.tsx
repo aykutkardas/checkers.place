@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Checkers Place',
     url: 'https://checkers.place',
+    type: 'website',
     images: [
       {
         url: 'https://checkers.place/checkers-place-og.png',
