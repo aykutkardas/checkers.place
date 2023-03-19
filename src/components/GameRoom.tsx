@@ -44,10 +44,10 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
 
   const path = usePathname();
   const router = useRouter();
-  const { get } = useSearchParams();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (get('color')) router.replace(path);
+    if (searchParams.get('color')) router.replace(path);
 
     getMembers(id).then(({ roomAvailable }) => {
       if (roomAvailable) {

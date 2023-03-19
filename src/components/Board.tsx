@@ -3,7 +3,6 @@ import { EventData, RealtimeManager } from 'altogic';
 import { Canvas } from '@react-three/fiber';
 import { AccumulativeShadows, Center, Environment, OrbitControls, RandomizedLight } from '@react-three/drei';
 import { Selection, EffectComposer, Outline } from '@react-three/postprocessing';
-import { useRouter } from 'next/navigation';
 
 // @ts-expect-error
 import { Utils } from 'ymir-js';
@@ -43,8 +42,6 @@ const Board = ({
   const [boardMatrix, setBoardMatrix] = useState([]);
   const [activeColor, setActiveColor] = useState<Color>(Color.Black);
   const [activeItem, setActiveItem] = useState<IItem | null>(null);
-
-  const router = useRouter();
 
   useEffect(() => {
     board.init();
@@ -184,7 +181,7 @@ const Board = ({
     });
 
     alert(`Winner is "${winner}"!`);
-  }, [move, activeColor, board, gameEnd, setGameEnd, id, router, realtime]);
+  }, [move, activeColor, board, gameEnd, setGameEnd, id, realtime]);
 
   const onPosition = (payload: EventData) => {
     if (isMe(payload.message.socketId)) return;
