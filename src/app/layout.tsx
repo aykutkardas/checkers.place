@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'Checkers Place',
+    description: 'It is a 3D, minimal and online checkers game.',
     url: 'https://checkers.place',
     type: 'website',
     images: [
