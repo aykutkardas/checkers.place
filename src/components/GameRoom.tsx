@@ -66,8 +66,8 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
     return () => {
       realtime.leave(id);
       realtime.off('channel:join', onJoin);
+      realtime.off('channel:leave', onLeave);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isMe = (id: string) => id === realtime.getSocketId();
@@ -120,15 +120,11 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
     <Toast.Provider>
       <section className="py-4 flex flex-col items-start justify-start h-screen">
         <div className="fixed z-30 p-3 top-[50%] right-0 inline-flex flex-col items-end h-10">
-          <Link href="/" className="text-white font-medium text-sm hover:opacity-80">
-            Leave Room
-            <Icon icon="door-open" size={18} className="ml-1" />
-          </Link>
-          <div className="text-xs flex items-center gap-2 mt-3 text-white">
-            Status
+          <div className="text-[11px] flex items-center gap-2 mb-3 bg-white/20 px-1 py-1 rounded-xl text-white">
+            <span className="ml-1">Status</span>
             <span
               className={clsx(
-                `ring-2 ring-white w-3 h-3 shadow-md block rounded-full bg-gradient-to-tr`,
+                `w-4 h-4 shadow-md block rounded-full bg-gradient-to-tr`,
                 connected
                   ? gameStarted
                     ? 'from-emerald-400 to-emerald-200'
@@ -137,6 +133,10 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
               )}
             />
           </div>
+          <Link href="/" className="text-white font-medium text-sm hover:opacity-80">
+            Leave Room
+            <Icon icon="door-open" size={18} className="ml-1" />
+          </Link>
         </div>
 
         {!gameAlreadyStarted && <Invite />}

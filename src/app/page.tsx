@@ -37,7 +37,10 @@ const HomePage = () => {
             <div
               className={clsx(
                 'group-hover:border-white/50 focus:outline-emerald-300 cursor-pointer border border-transparent rounded-lg text-white transition-colors text-xs px-4 py-2 block hover:border-white/50',
-                { 'border-white': type === gameType },
+                {
+                  'border-white': type === gameType,
+                  'text-neutral-300 pointer-events-none': gameType === GameType.International,
+                },
               )}
               role="button"
               tabIndex={0}
