@@ -36,8 +36,8 @@ const HomePage = () => {
           {gameTypes.map((gameType, id) => (
             <div
               className={clsx(
-                'group-hover:border-white/50 focus:outline-emerald-300 cursor-pointer rounded-md border border-transparent text-white transition-colors text-xs px-4 py-2 block',
-                { 'border border-transparent border-white rounded-lg': type === gameType },
+                'group-hover:border-white/50 focus:outline-emerald-300 cursor-pointer border border-transparent rounded-lg text-white transition-colors text-xs px-4 py-2 block hover:border-white/50',
+                { 'border-white': type === gameType },
               )}
               role="button"
               tabIndex={0}
@@ -54,8 +54,8 @@ const HomePage = () => {
             <div
               role="button"
               className={clsx(
-                'group-hover:border-white/50 focus:outline-emerald-300 cursor-pointer rounded-md border border-transparent text-white transition-colors text-xs px-4 py-2 block',
-                { 'border border-transparent border-white rounded-lg': selectedColor === color },
+                'group-hover:border-white/50 focus:outline-emerald-300 cursor-pointer border border-transparent rounded-lg text-white transition-colors text-xs px-4 py-2 block hover:border-white/50',
+                { 'border-white': selectedColor === color },
               )}
               onClick={(e) => setSelectedColor(color)}
               tabIndex={0}
