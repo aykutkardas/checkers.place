@@ -28,6 +28,19 @@ export const metadata: Metadata = {
       },
     ],
   },
+  twitter: {
+    title: 'Checkers Place',
+    site: '@aykutkardas',
+    description: 'It is a 3D, minimal and online checkers game.',
+    card: 'summary_large_image',
+    images: [
+      {
+        url: 'https://checkers.place/checkers-place-og.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
