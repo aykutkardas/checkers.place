@@ -119,7 +119,7 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
   return (
     <Toast.Provider>
       <section className="py-4 flex flex-col items-start justify-start h-screen">
-        <div className="fixed z-30 p-3 top-[50%] right-0 inline-flex flex-col items-end h-10">
+        <div className="fixed z-30 p-3 bottom-1 md:top-[50%] right-0 inline-flex flex-col items-end h-10">
           <div className="text-[11px] flex items-center gap-2 mb-3 bg-white/20 px-1 py-1 rounded-xl text-white">
             <span className="ml-1">Status</span>
             <span
@@ -133,7 +133,7 @@ const GameRoom = ({ isCreator, id, roomDetails }: GameRoomProps) => {
               )}
             />
           </div>
-          <Link href="/" className="text-white font-medium text-sm hover:opacity-80">
+          <Link href="/" className="text-white font-medium text-sm hover:opacity-80 hidden md:block">
             Leave Room
             <Icon icon="door-open" size={18} className="ml-1" />
           </Link>
