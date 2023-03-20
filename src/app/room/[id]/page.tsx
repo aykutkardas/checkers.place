@@ -1,6 +1,7 @@
 import { cache } from '@/libs/altogic';
 import GameRoom from '@/components/GameRoom';
 import { Color, GameType, RoomDetails } from '@/types';
+import { redirect } from 'next/navigation';
 
 type RoomPageProps = {
   params: {
@@ -16,6 +17,10 @@ async function getRoomDetails(id: string) {
   const { data, errors } = await cache.get(id);
   if (errors) {
     // TODO: handle errors
+  }
+
+  if (!data) {
+    return redirect('/');
   }
 
   return data as RoomDetails;
