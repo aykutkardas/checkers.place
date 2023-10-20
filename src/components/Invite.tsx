@@ -1,4 +1,5 @@
-import { useState } from 'react';
+'use client';
+import { useEffect, useState } from 'react';
 
 import { copyToClipboard } from '@/helpers';
 
@@ -6,7 +7,11 @@ const COPY_TEXT_DEFAULT = 'Click to copy link';
 
 const Invite = () => {
   const [copyText, setCopyText] = useState(COPY_TEXT_DEFAULT);
-  const url = location.href.split('?')[0];
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    setUrl(window?.location?.href?.split('?')[0]);
+  }, []);
 
   const copyURL = async () => {
     await copyToClipboard(url);

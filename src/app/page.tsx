@@ -1,12 +1,11 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import clsx from 'clsx';
 
-import { generateCode, getDataFromSessionStorage, setDataToSessionStorage } from '@/helpers';
-import { cache, realtime } from '@/libs/altogic';
 import { GameType, Color } from '@/types';
+import { createRoom } from '@/helpers';
 
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
@@ -16,16 +15,23 @@ const HomePage = () => {
   const gameTypes: GameType[] = [GameType.Turkish, GameType.International];
   const colors: Color[] = [Color.Black, Color.White];
 
-  const handleCreateRoom = async (event: FormEvent) => {
+  const handleCreateRoom = async () => {
     setLoading(true);
-    const roomId = generateCode();
-    realtime.updateProfile({ color: selectedColor, type });
-    setDataToSessionStorage('game-data', {
-      ...(getDataFromSessionStorage('game-data') ?? {}),
-      [roomId]: { color: selectedColor, type },
-    });
-    await cache.set(roomId, { type, color: selectedColor }, 1800);
-    router.push(`/room/${roomId}?color=${selectedColor}&type=${type}`);
+    const { success, roomCode } = await createRoom(type);
+    if (success) {
+      sessionStorage.setItem(
+        roomCode,
+        JSON.stringify({
+          color: selectedColor,
+          type: type,
+          isCreator: true,
+        }),
+      );
+
+      router.push(`/room/${roomCode}`);
+    }
+
+    setLoading(false);
   };
 
   return (

@@ -10,6 +10,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Checkers Place',
   description: 'It is a 3D, minimal and online checkers game.',
+  metadataBase: new URL('https://checkers.place'),
   icons: [
     {
       url: '/favicon.svg',
