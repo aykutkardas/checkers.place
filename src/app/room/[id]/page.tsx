@@ -25,7 +25,7 @@ type Storage = {
 
 export default function RoomPage() {
   const { replace } = useRouter();
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
 
   const [connected, setConnected] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
