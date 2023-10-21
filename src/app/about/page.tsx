@@ -83,18 +83,6 @@ const AboutPage = () => {
             </ul>
           </div>
         </div>
-
-        <div className="text-center text-emerald-200 text-sm font-medium mb-2 mt-8">USED TECHNOLOGIES</div>
-        <div className="flex flex-wrap text-white items-center justify-center gap-3">
-          <a
-            href="https://www.altogic.com/?utm_source=checkers.place&amp;utm_medium=referral"
-            target="_blank"
-            rel="noreferrer"
-            className="h-auto w-auto opacity-100 hover:opacity-70"
-          >
-            <Image width={86} height={32} src="/altogic.svg" alt="" className="h-8" />
-          </a>
-        </div>
       </div>
     </section>
   );

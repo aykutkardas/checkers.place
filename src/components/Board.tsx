@@ -1,16 +1,14 @@
 import { Fragment, useEffect, useState } from 'react';
-import { EventData, RealtimeManager } from 'altogic';
 import { Canvas } from '@react-three/fiber';
 import { AccumulativeShadows, Center, Environment, OrbitControls, RandomizedLight } from '@react-three/drei';
 import { Selection, EffectComposer, Outline } from '@react-three/postprocessing';
-
-// @ts-expect-error
 import { Utils } from 'ymir-js';
 const { parseCoord } = Utils;
 
 import Column from '@/components/Column';
 import Item from '@/components/Item';
 import { Color, GameType } from '@/types';
+import { socket } from '@/helpers/socket';
 
 interface BoardProps {
   id: string;
@@ -20,21 +18,9 @@ interface BoardProps {
   gameStarted: boolean;
   setGameEnd: (value: boolean) => void;
   currentColor?: Color;
-  realtime: RealtimeManager;
-  isMe: (id: string) => boolean;
 }
 
-const Board = ({
-  id,
-  gameType,
-  board: initialBoard,
-  currentColor,
-  realtime,
-  isMe,
-  gameEnd,
-  gameStarted,
-  setGameEnd,
-}: BoardProps) => {
+const Board = ({ id, gameType, board: initialBoard, currentColor, gameEnd, gameStarted, setGameEnd }: BoardProps) => {
   const [board] = useState(initialBoard);
   const [hovered, setHovered] = useState(false);
   const [turn, setTurn] = useState(0);
@@ -44,6 +30,21 @@ const Board = ({
   const [boardMatrix, setBoardMatrix] = useState([]);
   const [activeColor, setActiveColor] = useState<Color>(Color.Black);
   const [activeItem, setActiveItem] = useState<IItem | null>(null);
+
+  useEffect(() => {
+    console.log('Board useEffect');
+    socket.on('position', onPosition);
+    socket.on('activeColor', onActiveColor);
+    socket.on('activeItem', onActiveItem);
+    socket.on('won', onWon);
+
+    return () => {
+      socket.off('position', onPosition);
+      socket.off('activeColor', onActiveColor);
+      socket.off('activeItem', onActiveItem);
+      socket.off('won', onWon);
+    };
+  }, []);
 
   useEffect(() => {
     board.init();
@@ -73,9 +74,8 @@ const Board = ({
   }, [activeCoord, activeColor]);
 
   const sendActiveItem = (coord: string) => {
-    realtime.send(id, 'activeItem', {
+    socket.send(id, 'activeItem', {
       current: { activeItem: coord },
-      socketId: realtime.getSocketId(),
     });
   };
 
@@ -121,9 +121,9 @@ const Board = ({
 
     board.moveItem(fromCoord, toCoord);
     if (!noSend) {
-      realtime.send(id, 'position', {
+      socket.emit('position', {
         current: { fromCoord, toCoord },
-        socketId: realtime.getSocketId(),
+        roomCode: id,
       });
     }
 
@@ -146,9 +146,9 @@ const Board = ({
       setActiveColor(newActiveColor);
 
       if (!noSend) {
-        realtime.send(id, 'activeColor', {
+        socket.emit('activeColor', {
           current: { activeColor: newActiveColor },
-          socketId: realtime.getSocketId(),
+          roomCode: id,
         });
       }
       setActiveCoord(null);
@@ -179,53 +179,32 @@ const Board = ({
 
     setGameEnd(true);
 
-    realtime.send(id, 'won', {
+    socket.emit('won', {
       current: { winner },
-      socketId: realtime.getSocketId(),
+      roomCode: id,
     });
 
     alert(`Winner is "${winner}"!`);
-  }, [move, activeColor, board, gameEnd, setGameEnd, id, realtime]);
+  }, [move, activeColor, board, gameEnd, setGameEnd, id]);
 
-  const onPosition = (payload: EventData) => {
-    if (isMe(payload.message.socketId)) return;
-    const { current } = payload.message;
+  const onPosition = ({ current }: any) => {
     moveItem(current.fromCoord, current.toCoord, true);
   };
 
-  const onActiveColor = (payload: EventData) => {
-    if (isMe(payload.message.socketId)) return;
-    const { current } = payload.message;
+  const onActiveColor = ({ current }: any) => {
     setActiveColor(current.activeColor);
     setActiveCoord(null);
   };
 
-  const onActiveItem = (payload: EventData) => {
-    if (isMe(payload.message.socketId)) return;
-    const { current } = payload.message;
+  const onActiveItem = ({ current }: any) => {
+    console.log('onActiveItem', current);
     setActiveItem(board.getItem(current.activeItem));
   };
 
-  const onWon = (payload: EventData) => {
-    if (isMe(payload.message.socketId)) return;
-    const { winner } = payload.message;
+  const onWon = ({ current: { winner } }: any) => {
     if (!winner) return;
     alert(`Winner is "${winner}"!`);
   };
-
-  useEffect(() => {
-    realtime.on('position', onPosition);
-    realtime.on('activeColor', onActiveColor);
-    realtime.on('activeItem', onActiveItem);
-    realtime.on('won', onWon);
-
-    return () => {
-      realtime.off('position', onPosition);
-      realtime.off('activeColor', onActiveColor);
-      realtime.off('activeItem', onActiveItem);
-      realtime.off('won', onWon);
-    };
-  }, []);
 
   interface IItem {
     color: Color;

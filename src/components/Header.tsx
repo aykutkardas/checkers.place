@@ -20,10 +20,15 @@ const Header = () => {
             alt="minimal checkers board view"
           />
         </a>
-        <Link href="/" className="text-white font-medium text-sm hover:opacity-80 ml-2 md:hidden">
-          Leave Room
-          <Icon icon="door-open" size={18} className="ml-1" />
-        </Link>
+        {pathname.startsWith('/room') && (
+          <Link
+            href="/"
+            className="flex items-center gap-1 text-white font-medium text-sm hover:opacity-80 ml-2 md:hidden"
+          >
+            Leave Room
+            <Icon icon="door-open" size={18} />
+          </Link>
+        )}
       </div>
       <Link
         href="/about"

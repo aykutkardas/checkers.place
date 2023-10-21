@@ -1,9 +1,5 @@
-import { nanoid } from 'nanoid';
-import { realtime } from '@/libs/altogic';
-
-export function generateCode() {
-  return nanoid(15);
-}
+import axios from 'axios';
+import { GameType } from '@/types';
 
 export async function copyToClipboard(text: string) {
   if (!navigator.clipboard) {
@@ -19,26 +15,39 @@ export async function copyToClipboard(text: string) {
   }
 }
 
-export function getDataFromSessionStorage<T>(key: string): T | null {
-  if (typeof window !== 'undefined') {
-    const item = window.sessionStorage.getItem(key);
-    return item ? JSON.parse(item) : null;
-  }
-  return null;
-}
+const URL = process.env.NEXT_PUBLIC_API_URL;
 
-export function setDataToSessionStorage<T>(key: string, value: T) {
-  sessionStorage.setItem(key, JSON.stringify(value));
-}
+if (!URL) throw new Error('NEXT_PUBLIC_API_URL is not defined');
 
-export async function getMembers(id: string) {
-  let { data } = await realtime.getMembers(id);
-  data = data as { id: string; data?: {} }[];
+const END_POINT = URL.includes('api.checkers.place') ? URL : URL + '/checkers/room';
 
-  if (!data) return { roomAvailable: false, members: [] };
+export async function isRoomExists(roomId: string) {
+  const { data } = await axios.get(`${END_POINT}/exist/${roomId}`, {
+    validateStatus: (status) => status < 500,
+  });
 
-  return {
-    roomAvailable: data.length < 2,
-    members: data,
+  return data as {
+    success: boolean;
+    message: string;
+    room: {
+      type: GameType;
+    };
   };
+}
+
+export async function createRoom(type: GameType) {
+  type CreateRoomResponse = {
+    roomCode: string;
+    message: string;
+    success: boolean;
+  };
+  const { data } = await axios.post<CreateRoomResponse>(
+    END_POINT,
+    { type },
+    {
+      validateStatus: (status) => status < 500,
+    },
+  );
+
+  return data as CreateRoomResponse;
 }
